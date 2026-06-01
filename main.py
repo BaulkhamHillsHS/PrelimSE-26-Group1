@@ -1,1 +1,1 @@
-print("Hello world")
+import customtkinter as ctk
