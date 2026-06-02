@@ -4,7 +4,6 @@ ctk.set_appearance_mode('light')
 ctk.set_default_color_theme('green')
 
 class streamApp(ctk.CTk):
-
     def __init__(self):
         super().__init__()
         self.title("Streaming app")
@@ -24,7 +23,7 @@ class streamApp(ctk.CTk):
         self.frame_start.grid_rowconfigure((0, 1, 2), weight=1)
 
         #Heading
-        ctk.CTkLabel(self.frame_start, text="Who's Watching?", font=("Arial", 30), text_color="#000000").grid(row=0, column=1, padx=10, pady=10)
+        ctk.CTkLabel(self.frame_start, text="Who's Watching?", font=("Arial", 30), text_color="#ffffff").grid(row=0, column=1, padx=10, pady=10)
 
         #Menu
         self.frame_profile_menu = ctk.CTkFrame(master=self.frame_start)
