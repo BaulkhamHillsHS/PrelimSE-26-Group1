@@ -23,6 +23,9 @@ class streamApp(ctk.CTk):
         self.frame_start.grid_columnconfigure((0, 1, 2), weight=1) 
         self.frame_start.grid_rowconfigure((0, 1, 2), weight=1)
 
+        #Logo
+        ctk.CTkImage()
+
         #Heading
         ctk.CTkLabel(self.frame_start, text="Who's Watching?", font=("Arial", 30), text_color="#000000").grid(row=0, column=1, padx=10, pady=10)
 
