@@ -33,11 +33,21 @@ class nutflixSignIn(ctk.CTk):
         ctk.CTkLabel(self.frame_form, text="Sign In", font=("Arial", 40), text_color="#890000").grid(row=0, column=0, padx=10, pady=10)
 
         #Text Input
-        ctk.CTkEntry(self.frame_form, placeholder_text="Username", height=50, width=300).grid(row=1, column=0, sticky="n")
-        ctk.CTkEntry(self.frame_form, placeholder_text="Password", height=50, width=300).grid(row=2, column=0, sticky="n")
+        self.entry_username = ctk.CTkEntry(self.frame_form, placeholder_text="Username", height=50, width=300)
+        self.entry_username.grid(row=1, column=0, sticky="n")
+
+        self.entry_password = ctk.CTkEntry(self.frame_form, placeholder_text="Password", height=50, width=300)
+        self.entry_password.grid(row=2, column=0, sticky="n")
 
         #Submit Button
-        ctk.CTkButton(self.frame_form, text="Sign In").grid(row=3, column=0, sticky="n")
+        ctk.CTkButton(self.frame_form, text="Sign In", command=self._sign_in).grid(row=3, column=0, sticky="n")
+    
+    def _sign_in(self):
+        username = self.entry_username.get()
+        password = self.entry_password.get()
+
+        print(username, password)
+
 
 
 class nutflixStart(ctk.CTk):
@@ -91,5 +101,5 @@ class nutflixStart(ctk.CTk):
         self.button_edit_profile.grid(row=2, column=1)
 
 if __name__ == "__main__":
-    app = nutflixSignUp()
+    app = nutflixSignIn()
     app.mainloop()
