@@ -33,7 +33,7 @@
             "text_color": ["#000000", "#FFFFFF"],
             "placeholder_text_color": ["#000000", "#FFFFFF"],
             "border_color": ["#3B8ED0", "#1F6AA5"],
-            "corner_radius": 6,
+            "corner_radius": 15,
             "border_width": 0
       }
 }
