@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from PIL import Image
+import csv
 
 ctk.set_appearance_mode('light')
 ctk.set_default_color_theme("theme_nutflix.JSON")
@@ -14,12 +15,12 @@ class nutflixSignIn(ctk.CTk):
         self.geometry("1080x720")
         self.resizable(True, True)
 
-        self._build_ui()
+        self.build_ui()
     
-    def _build_ui(self):
-        self._build_form_frame()
+    def build_ui(self):
+        self.build_form_frame()
     
-    def _build_form_frame(self):
+    def build_form_frame(self):
         self.frame_form = ctk.CTkFrame(self)
         self.frame_form.pack(fill="both", expand=True, pady=200)
 
@@ -33,27 +34,49 @@ class nutflixSignIn(ctk.CTk):
         ctk.CTkLabel(self.frame_form, text="Sign In", font=("Arial", 40), text_color="#890000").grid(row=0, column=0, padx=10, pady=10)
 
         #Text Input
-        ctk.CTkEntry(self.frame_form, placeholder_text="Username", height=50, width=300).grid(row=1, column=0, sticky="n")
-        ctk.CTkEntry(self.frame_form, placeholder_text="Password", height=50, width=300).grid(row=2, column=0, sticky="n")
+        self.entry_username = ctk.CTkEntry(self.frame_form, placeholder_text="Username", height=50, width=300)
+        self.entry_username.grid(row=1, column=0, sticky="n")
+        self.entry_password = ctk.CTkEntry(self.frame_form, placeholder_text="Password", height=50, width=300)
+        self.entry_password.grid(row=2, column=0, sticky="n")
 
         #Submit Button
-        ctk.CTkButton(self.frame_form, text="Sign In").grid(row=3, column=0, sticky="n")
-
-
-class nutflixStart(ctk.CTk):
-
-    def __init__(self):
-        super().__init__()
-        self.title("Streaming app")
-        self.geometry("1080x720")
-        self.resizable(True, True)
-
-        self._build_ui()
+        ctk.CTkButton(self.frame_form, text="Sign In", command=self.sign_in).grid(row=3, column=0, sticky="n")
     
-    def _build_ui(self):
-        self._build_start_frame()
+    def sign_in(self):
+        username = self.entry_username.get().strip()
+        password = self.entry_password.get().strip()
+
+        if self.validate_credentials(username, password):
+            print("Sign in successful")
+
+            #Show start menu frame
+            self.controller.show_frame(nutflixStart)
+        else:
+            print("Sign in failed")
+
+    def validate_credentials(self, username, password):
+        try:
+            with open("account_information.csv", "r") as file:
+                reader = csv.reader(file)
+                for row in reader:
+                    if row[0] == username and row[1] == password:
+                        return True
+            return False
+        except FileNotFoundError:
+            return False
+
+class nutflixStart(ctk.CTkFrame):
+
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
+
+        self.build_ui()
     
-    def _build_start_frame(self):
+    def build_ui(self):
+        self.build_start_frame()
+    
+    def build_start_frame(self):
         self.frame_start = ctk.CTkFrame(self)
         self.frame_start.pack(fill="both", expand=True)
 
@@ -91,5 +114,5 @@ class nutflixStart(ctk.CTk):
         self.button_edit_profile.grid(row=2, column=1)
 
 if __name__ == "__main__":
-    app = nutflixSignUp()
+    app = nutflixApp()
     app.mainloop()
