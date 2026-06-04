@@ -134,7 +134,7 @@ class nutflixStart(ctk.CTkFrame):
         self.button_profile_create = ctk.CTkButton(self.frame_profile_menu, text="Create Profile", font=("Arial", 24), width=200, height=200)
         self.button_profile_create.grid(row=0, column=3)
 
-        #Edit Profiles Button
+        #Edit Profiles Buttons
         self.button_edit_profile = ctk.CTkButton(self.frame_start, text="Edit Profiles", font=("Arial", 16), width=200, height=50)
         self.button_edit_profile.grid(row=2, column=1)
 
