@@ -8,12 +8,37 @@ ctk.set_default_color_theme("theme_nutflix.JSON")
 logo_red = Image.open("images/logo_red.png")
 logo_white = Image.open("images/logo_transparent.png")
 
-class nutflixSignIn(ctk.CTk):
+class nutflixApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Streaming app")
         self.geometry("1080x720")
         self.resizable(True, True)
+
+        self.container = ctk.CTkFrame(self)
+        self.container.pack(side="top", fill="both", expand=True)
+        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_columnconfigure(0, weight=1)
+
+        self.frames = {}
+        
+        # Create frame instances and store them
+        for f in (nutflixSignIn, nutflixStart):
+            frame = f(self.container, self)
+            self.frames[f] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
+        
+        # Show the sign in frame first
+        self.show_frame(nutflixSignIn)  
+    
+    def show_frame(self, cont):
+        frame = self.frames[cont]
+        frame.tkraise()
+
+class nutflixSignIn(ctk.CTkFrame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
 
         self.build_ui()
     
