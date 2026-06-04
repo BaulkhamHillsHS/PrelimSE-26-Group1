@@ -34,20 +34,18 @@ class nutflixApp(ctk.CTk):
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
-        
-        nutflixSignIn.tkraise(self)
 
 class nutflixSignIn(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
 
-        self._build_ui()
+        self.build_ui()
     
-    def _build_ui(self):
-        self._build_form_frame()
+    def build_ui(self):
+        self.build_form_frame()
     
-    def _build_form_frame(self):
+    def build_form_frame(self):
         self.frame_form = ctk.CTkFrame(self)
         self.frame_form.pack(fill="both", expand=True, pady=200)
 
@@ -67,18 +65,21 @@ class nutflixSignIn(ctk.CTkFrame):
         self.entry_password.grid(row=2, column=0, sticky="n")
 
         #Submit Button
-        ctk.CTkButton(self.frame_form, text="Sign In", command=self._sign_in).grid(row=3, column=0, sticky="n")
+        ctk.CTkButton(self.frame_form, text="Sign In", command=self.sign_in).grid(row=3, column=0, sticky="n")
     
-    def _sign_in(self):
+    def sign_in(self):
         username = self.entry_username.get().strip()
         password = self.entry_password.get().strip()
 
-        if self._validate_credentials(username, password):
+        if self.validate_credentials(username, password):
             print("Sign in successful")
+
+            #Show start menu frame
+            self.controller.show_frame(nutflixStart)
         else:
             print("Sign in failed")
 
-    def _validate_credentials(self, username, password):
+    def validate_credentials(self, username, password):
         try:
             with open("account_information.csv", "r") as file:
                 reader = csv.reader(file)
@@ -95,12 +96,12 @@ class nutflixStart(ctk.CTkFrame):
         super().__init__(parent)
         self.controller = controller
 
-        self._build_ui()
+        self.build_ui()
     
-    def _build_ui(self):
-        self._build_start_frame()
+    def build_ui(self):
+        self.build_start_frame()
     
-    def _build_start_frame(self):
+    def build_start_frame(self):
         self.frame_start = ctk.CTkFrame(self)
         self.frame_start.pack(fill="both", expand=True)
 
