@@ -23,13 +23,13 @@ class nutflixApp(ctk.CTk):
         self.frames = {}
         
         # Create frame instances and store them
-        for f in (nutflixSignIn, nutflixStart):
+        for f in (nutflixSignIn, nutflixSignUp, nutflixStart):
             frame = f(self.container, self)
             self.frames[f] = frame
             frame.grid(row=0, column=0, sticky="nsew")
         
         # Show the sign in frame first
-        self.show_frame(nutflixSignIn)  
+        self.show_frame(nutflixSignIn)
     
     def show_frame(self, cont):
         frame = self.frames[cont]
@@ -43,29 +43,29 @@ class nutflixSignIn(ctk.CTkFrame):
         self.build_ui()
     
     def build_ui(self):
-        self.build_form_frame()
-    
-    def build_form_frame(self):
         self.frame_form = ctk.CTkFrame(self)
         self.frame_form.pack(fill="both", expand=True, pady=200)
 
         self.frame_form.grid_columnconfigure((0), weight=1) 
-        self.frame_form.grid_rowconfigure((0, 1, 2), weight=1)
+        self.frame_form.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
 
-        #Logo
+        # Logo
         logo = ctk.CTkImage(light_image=logo_white, dark_image=logo_red, size=(30, 30))
 
-        #Heading
+        # Heading
         ctk.CTkLabel(self.frame_form, text="Sign In", font=("Arial", 40), text_color="#890000").grid(row=0, column=0, padx=10, pady=10)
 
-        #Text Input
+        # Text Input
         self.entry_username = ctk.CTkEntry(self.frame_form, placeholder_text="Username", height=50, width=300)
         self.entry_username.grid(row=1, column=0, sticky="n")
         self.entry_password = ctk.CTkEntry(self.frame_form, placeholder_text="Password", height=50, width=300)
         self.entry_password.grid(row=2, column=0, sticky="n")
 
-        #Submit Button
+        # Submit Button
         ctk.CTkButton(self.frame_form, text="Sign In", command=self.sign_in).grid(row=3, column=0, sticky="n")
+        
+        # Account Creation Button
+        ctk.CTkButton(self.frame_form, text="Create Account", text_color="#890000", fg_color="#F7F7F7", hover_color="#F7F7F7", command=lambda: self.controller.show_frame(nutflixSignUp)).grid(row=4, column=0, sticky="n")
     
     def sign_in(self):
         username = self.entry_username.get().strip()
@@ -90,12 +90,40 @@ class nutflixSignIn(ctk.CTkFrame):
         except FileNotFoundError:
             return False
 
-class nutflixStart(ctk.CTkFrame):
-
+class nutflixSignUp(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
+        self.build_ui()
+    
+    def build_ui(self):
+        self.frame_form = ctk.CTkFrame(self)
+        self.frame_form.pack(fill="both", expand=True, pady=200)
+        
+        self.frame_form.grid_columnconfigure((0), weight=1) 
+        self.frame_form.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6), weight=1)
 
+        ctk.CTkLabel(self.frame_form, text="Create Account", font=("Arial", 40), text_color="#890000").grid(row=0, column=0, padx=10, pady=10)
+        
+        self.entry_email = ctk.CTkEntry(self.frame_form, placeholder_text="Email", height=50, width=300)
+        self.entry_email.grid(row=1, column=0, pady=10)
+        ctk.CTkButton(self.frame_form, text="Send Code").grid(row=2, column=0, sticky="n")
+        
+        self.entry_fullname = ctk.CTkEntry(self.frame_form, placeholder_text="Full Name", height=50, width=300)
+        self.entry_fullname.grid(row=3, column=0, pady=10)
+        
+        self.entry_password = ctk.CTkEntry(self.frame_form, placeholder_text="Password", height=50, width=300)
+        self.entry_password.grid(row=4, column=0, pady=10)
+        
+        self.entry_verify_password = ctk.CTkEntry(self.frame_form, placeholder_text="Re-enter Password", height=50, width=300)
+        self.entry_verify_password.grid(row=5, column=0, pady=10)
+        
+        ctk.CTkButton(self.frame_form, text="Sign Up").grid(row=6, column=0, sticky="n")
+    
+class nutflixStart(ctk.CTkFrame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
         self.build_ui()
     
     def build_ui(self):
