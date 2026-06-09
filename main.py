@@ -23,7 +23,7 @@ class nutflixApp(ctk.CTk):
         self.frames = {}
         
         # Create frame instances and store them
-        for f in (nutflixSignIn, nutflixSignUp, nutflixStart):
+        for f in (nutflixSignIn, nutflixStart, nutflixCreateProfile):
             frame = f(self.container, self)
             self.frames[f] = frame
             frame.grid(row=0, column=0, sticky="nsew")
@@ -39,7 +39,6 @@ class nutflixSignIn(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
-
         self.build_ui()
     
     def build_ui(self):
@@ -63,9 +62,6 @@ class nutflixSignIn(ctk.CTkFrame):
 
         # Submit Button
         ctk.CTkButton(self.frame_form, text="Sign In", command=self.sign_in).grid(row=3, column=0, sticky="n")
-        
-        # Account Creation Button
-        ctk.CTkButton(self.frame_form, text="Create Account", text_color="#890000", fg_color="#F7F7F7", hover_color="#F7F7F7", command=lambda: self.controller.show_frame(nutflixSignUp)).grid(row=4, column=0, sticky="n")
     
     def sign_in(self):
         username = self.entry_username.get().strip()
@@ -90,7 +86,6 @@ class nutflixSignIn(ctk.CTkFrame):
         except FileNotFoundError:
             return False
 
-
 class nutflixStart(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
@@ -98,9 +93,6 @@ class nutflixStart(ctk.CTkFrame):
         self.build_ui()
     
     def build_ui(self):
-        self.build_start_frame()
-    
-    def build_start_frame(self):
         self.frame_start = ctk.CTkFrame(self)
         self.frame_start.pack(fill="both", expand=True)
 
@@ -130,12 +122,38 @@ class nutflixStart(ctk.CTkFrame):
         self.button_profile3 = ctk.CTkButton(self.frame_profile_menu, text="Profile 3", font=("Arial", 24), width=200, height=200)
         self.button_profile3.grid(row=0, column=2)
 
-        self.button_profile_create = ctk.CTkButton(self.frame_profile_menu, text="Create Profile", font=("Arial", 24), width=200, height=200)
+        self.button_profile_create = ctk.CTkButton(self.frame_profile_menu, text="Create Profile", command=lambda: self.controller.show_frame(nutflixCreateProfile), font=("Arial", 24), width=200, height=200)
         self.button_profile_create.grid(row=0, column=3)
 
         #Edit Profiles Buttons
         self.button_edit_profile = ctk.CTkButton(self.frame_start, text="Edit Profiles", font=("Arial", 16), width=200, height=50)
         self.button_edit_profile.grid(row=2, column=1)
+
+class nutflixCreateProfile(ctk.CTkFrame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
+        self.build_ui()
+    
+    def build_ui(self):
+        self.frame_start = ctk.CTkFrame(self)
+        self.frame_start.pack(fill="both", expand=True)
+        
+        self.frame_start.grid_columnconfigure((0), weight=1) 
+        self.frame_start.grid_rowconfigure((0, 1, 2, 3), weight=1)
+
+        ctk.CTkLabel(self.frame_start, text="Create Account", font=("Arial", 40), text_color="#890000").grid(row=0, column=0, padx=10, pady=10)
+        
+        self.profile_name = ctk.CTkEntry(self.frame_start, placeholder_text="Profile Name", height=50, width=300)
+        self.profile_name.grid(row=1, column=0, pady=10)
+        
+        self.age_rating = ctk.CTkOptionMenu(self.frame_start, values=["G", "PG", "M", "MA15+", "R18+"], height=50, width=300)
+        self.age_rating.grid(row=2, column=0, pady=10)
+        
+        ctk.CTkButton(self.frame_start, text="Sign Up").grid(row=3, column=0, sticky="n")
+        
+    def add_profile(self):
+        print("hello")
 
 if __name__ == "__main__":
     app = nutflixApp()

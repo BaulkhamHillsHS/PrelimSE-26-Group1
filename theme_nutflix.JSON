@@ -35,5 +35,27 @@
             "border_color": ["#3B8ED0", "#1F6AA5"],
             "corner_radius": 15,
             "border_width": 0
+      },
+      "CTkOptionMenu": {
+            "corner_radius": 6,
+            "border_width": 0,
+            "fg_color": ["#890000", "#1F6AA5"],
+            "hover_color": ["#5E0000", "#144870"],
+            "border_color": ["#3B8ED0", "#1F6AA5"],
+            "text_color": ["#FFFFFF", "#DCE4EE"],
+            "text_color_disabled": ["#A3A3A3", "#606060"],
+            "button_color": ["#890000", "#1F6AA5"],
+            "button_hover_color": ["#890000", "#1F6AA5"]
+      },
+      "DropdownMenu": {
+            "corner_radius": 6,
+            "border_width": 0,
+            "fg_color": ["#890000", "#1F6AA5"],
+            "hover_color": ["#5E0000", "#144870"],
+            "border_color": ["#3B8ED0", "#1F6AA5"],
+            "text_color": ["#FFFFFF", "#DCE4EE"],
+            "text_color_disabled": ["#A3A3A3", "#606060"],
+            "button_color": ["#890000", "#1F6AA5"],
+            "button_hover_color": ["#890000", "#1F6AA5"]
       }
 }
