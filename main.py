@@ -90,36 +90,7 @@ class nutflixSignIn(ctk.CTkFrame):
         except FileNotFoundError:
             return False
 
-class nutflixSignUp(ctk.CTkFrame):
-    def __init__(self, parent, controller):
-        super().__init__(parent)
-        self.controller = controller
-        self.build_ui()
-    
-    def build_ui(self):
-        self.frame_form = ctk.CTkFrame(self)
-        self.frame_form.pack(fill="both", expand=True, pady=200)
-        
-        self.frame_form.grid_columnconfigure((0), weight=1) 
-        self.frame_form.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6), weight=1)
 
-        ctk.CTkLabel(self.frame_form, text="Create Account", font=("Arial", 40), text_color="#890000").grid(row=0, column=0, padx=10, pady=10)
-        
-        self.entry_email = ctk.CTkEntry(self.frame_form, placeholder_text="Email", height=50, width=300)
-        self.entry_email.grid(row=1, column=0, pady=10)
-        ctk.CTkButton(self.frame_form, text="Send Code").grid(row=2, column=0, sticky="n")
-        
-        self.entry_fullname = ctk.CTkEntry(self.frame_form, placeholder_text="Full Name", height=50, width=300)
-        self.entry_fullname.grid(row=3, column=0, pady=10)
-        
-        self.entry_password = ctk.CTkEntry(self.frame_form, placeholder_text="Password", height=50, width=300)
-        self.entry_password.grid(row=4, column=0, pady=10)
-        
-        self.entry_verify_password = ctk.CTkEntry(self.frame_form, placeholder_text="Re-enter Password", height=50, width=300)
-        self.entry_verify_password.grid(row=5, column=0, pady=10)
-        
-        ctk.CTkButton(self.frame_form, text="Sign Up").grid(row=6, column=0, sticky="n")
-    
 class nutflixStart(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
