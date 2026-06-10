@@ -8,7 +8,7 @@ ctk.set_default_color_theme("theme_nutflix.JSON")
 logo_red = Image.open("images/logo_red.png")
 logo_white = Image.open("images/logo_transparent.png")
 
-email = ""
+email = "" # Gets set once user logs in
 
 class nutflixApp(ctk.CTk):
     def __init__(self):
@@ -160,17 +160,15 @@ class nutflixCreateProfile(ctk.CTkFrame):
         rows = []
         profile_name = self.profile_name.get()
         profile_age_rating = self.age_rating.get()
-        profile = [email, profile_name, profile_age_rating]
-        print(profile)
+        profile = [email, profile_name, profile_age_rating] # Email is a global value
 
         with open("profile_information.csv", "r") as file: # Csv containing profile information
             reader = csv.reader(file)
             for row in reader:
                 rows.append(row) # Reads the profile and appends values to an editable list
-            print(rows)
 
         with open("profile_information.csv", "w", newline="") as file:
-            writer = csv.DictWriter(file, fieldnames=profile)
+            writer = csv.DictWriter(file, fieldnames=profile) # Sets the field names to the details of the new profile
             writer.writeheader()
             writer.writerows
             
