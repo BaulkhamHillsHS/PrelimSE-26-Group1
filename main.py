@@ -8,6 +8,8 @@ ctk.set_default_color_theme("theme_nutflix.JSON")
 logo_red = Image.open("images/logo_red.png")
 logo_white = Image.open("images/logo_transparent.png")
 
+email = ""
+
 class nutflixApp(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -81,6 +83,8 @@ class nutflixSignIn(ctk.CTkFrame):
                 reader = csv.reader(file)
                 for row in reader:
                     if row[0] == username and row[1] == password:
+                        global email
+                        email = row[2]
                         return True
             return False
         except FileNotFoundError:
@@ -150,10 +154,28 @@ class nutflixCreateProfile(ctk.CTkFrame):
         self.age_rating = ctk.CTkOptionMenu(self.frame_start, values=["G", "PG", "M", "MA15+", "R18+"], height=50, width=300)
         self.age_rating.grid(row=2, column=0, pady=10)
         
-        ctk.CTkButton(self.frame_start, text="Sign Up").grid(row=3, column=0, sticky="n")
-        
+        ctk.CTkButton(self.frame_start, text="Create Profile", command=self.add_profile).grid(row=3, column=0, sticky="n")
+    
     def add_profile(self):
-        print("hello")
+        rows = []
+        profile_name = self.profile_name.get()
+        profile_age_rating = self.age_rating.get()
+        profile = [email, profile_name, profile_age_rating]
+        print(profile)
+
+        with open("profile_information.csv", "r") as file: # Csv containing profile information
+            reader = csv.reader(file)
+            for row in reader:
+                rows.append(row) # Reads the profile and appends values to an editable list
+            print(rows)
+
+        with open("profile_information.csv", "w", newline="") as file:
+            writer = csv.DictWriter(file, fieldnames=profile)
+            writer.writeheader()
+            writer.writerows
+            
+        # Needs to take you back to profile screen
+ 
 
 if __name__ == "__main__":
     app = nutflixApp()
