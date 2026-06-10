@@ -8,8 +8,6 @@ ctk.set_default_color_theme("theme_nutflix.JSON")
 logo_red = Image.open("images/logo_red.png")
 logo_white = Image.open("images/logo_transparent.png")
 
-email = "" # Gets set once user logs in
-
 class nutflixApp(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -36,6 +34,12 @@ class nutflixApp(ctk.CTk):
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
+    
+    def set_user_email(self, email): # Setter function to set the email of current user, used for identification
+        self.current_user_email = email
+    
+    def get_user_email(self): # Getter function to receive the email of the current user for identification
+        return self.current_user_email
 
 class nutflixSignIn(ctk.CTkFrame):
     def __init__(self, parent, controller):
@@ -83,8 +87,7 @@ class nutflixSignIn(ctk.CTkFrame):
                 reader = csv.reader(file)
                 for row in reader:
                     if row[0] == username and row[1] == password:
-                        global email
-                        email = row[2]
+                        self.controller.set_user_email(row[2]) # Stores the email of the current user
                         return True
             return False
         except FileNotFoundError:
@@ -159,12 +162,14 @@ class nutflixCreateProfile(ctk.CTkFrame):
     def add_profile(self):
         profile_name = self.profile_name.get()
         profile_age_rating = self.age_rating.get()
-        profile = [email, profile_name, profile_age_rating] # Email is a global value
+        account_email = self.controller.get_user_email()
+
+        profile = [account_email, profile_name, profile_age_rating] # Email is a global value
 
         with open("profile_information.csv", "r") as file: # Csv containing profile information
             reader = csv.reader(file)
             for row in reader:
-                if (row[0], row[1]) == (email, profile_name):
+                if (row[0], row[1]) == (account_email, profile_name):
                     return # Profile with same name under same email already exists
 
         with open("profile_information.csv", "a", newline="") as file:
