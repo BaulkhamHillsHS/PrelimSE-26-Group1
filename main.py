@@ -35,11 +35,27 @@ class nutflixApp(ctk.CTk):
         frame = self.frames[cont]
         frame.tkraise()
     
-    def set_user_email(self, email): # Setter function to set the email of current user, used for identification
+    def set_user_information(self, username, password, email, full_name, plan, profile_count): # Setter function to set the account information of the current uer
+        self.current_user_username = username
+        self.current_user_password = password
         self.current_user_email = email
+        self.current_user_full_name = full_name
+        self.current_user_plan = plan
+        self.current_user_profile_count = profile_count
     
-    def get_user_email(self): # Getter function to receive the email of the current user for identification
-        return self.current_user_email
+    def get_user_information(self, parameter): # Getter function to receive the email of the current user for identification
+        if parameter == "username":
+            return self.current_user_username
+        if parameter == "password":
+            return self.current_user_password
+        if parameter == "email":
+            return self.current_user_email
+        if parameter == "full_name":
+            return self.current_user_full_name
+        if parameter == "plan":
+            return self.plan
+        if parameter == "profile_count":
+            return self.current_user_profile_count
 
 class nutflixSignIn(ctk.CTkFrame):
     def __init__(self, parent, controller):
@@ -87,7 +103,7 @@ class nutflixSignIn(ctk.CTkFrame):
                 reader = csv.reader(file)
                 for row in reader:
                     if row[0] == username and row[1] == password:
-                        self.controller.set_user_email(row[2]) # Stores the email of the current user
+                        self.controller.set_user_information(row[0], row[1], row[2], row[3], row[4], row[5]) # Sets the current user details
                         return True
             return False
         except FileNotFoundError:
@@ -162,7 +178,7 @@ class nutflixCreateProfile(ctk.CTkFrame):
     def add_profile(self):
         profile_name = self.profile_name.get()
         profile_age_rating = self.age_rating.get()
-        account_email = self.controller.get_user_email()
+        account_email = self.controller.get_user_information("email")
 
         profile = [account_email, profile_name, profile_age_rating] # Email is a global value
 
