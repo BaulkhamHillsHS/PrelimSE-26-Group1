@@ -1,0 +1,51 @@
+name,movie_or_tv_show,genre1,genre2,age_rating
+The Shawshank Redemption,Movie,Drama,Mystery,MA15+
+Breaking Bad,TV Show,Crime,Drama,MA15+
+Inception,Movie,Sci-Fi,Thriller,M
+Stranger Things,TV Show,Sci-Fi,Horror,MA15+
+The Dark Knight,Movie,Action,Thriller,M
+Game of Thrones,TV Show,Fantasy,Drama,MA15+
+Interstellar,Movie,Sci-Fi,Drama,M
+The Office,TV Show,Comedy,Satire,PG
+Parasite,Movie,Thriller,Drama,MA15+
+Chernobyl,TV Show,Drama,Historical,MA15+
+The Godfather,Movie,Crime,Drama,R18+
+The Last of Us,TV Show,Action,Drama,MA15+
+Pulp Fiction,Movie,Crime,Drama,R18+
+Succession,TV Show,Drama,Satire,MA15+
+Oppenheimer,Movie,Historical,Drama,MA15+
+Severance,TV Show,Sci-Fi,Thriller,MA15+
+Dune,Movie,Sci-Fi,Adventure,M
+Peaky Blinders,TV Show,Crime,Drama,MA15+
+Mad Max: Fury Road,Movie,Action,Sci-Fi,MA15+
+Fleabag,TV Show,Comedy,Drama,MA15+
+Everything Everywhere All at Once,Movie,Sci-Fi,Comedy,MA15+
+The Bear,TV Show,Drama,Comedy,MA15+
+Whiplash,Movie,Drama,Music,M
+The Crown,TV Show,Historical,Drama,M
+No Country for Old Men,Movie,Crime,Thriller,MA15+
+Arcane,TV Show,Animation,Fantasy,M
+Arrival,Movie,Sci-Fi,Drama,M
+Squid Game,TV Show,Thriller,Drama,MA15+
+The Silence of the Lambs,Movie,Thriller,Horror,MA15+
+Better Call Saul,TV Show,Crime,Drama,MA15+
+Spirited Away,Movie,Animation,Fantasy,G
+Andor,TV Show,Sci-Fi,Action,M
+The Grand Budapest Hotel,Movie,Comedy,Drama,M
+White Lotus,TV Show,Comedy,Drama,MA15+
+Gladiator,Movie,Action,Historical,MA15+
+Shogun,TV Show,Historical,Drama,MA15+
+There Will Be Blood,Movie,Drama,Historical,M
+Dark,TV Show,Sci-Fi,Mystery,MA15+
+Heat,Movie,Crime,Thriller,M
+True Detective,TV Show,Crime,Mystery,MA15+
+The Truman Show,Movie,Drama,Sci-Fi,PG
+Fargo,TV Show,Crime,Thriller,MA15+
+A Beautiful Mind,Movie,Drama,Biopic,M
+The Wire,TV Show,Crime,Drama,MA15+
+Blade Runner 2049,Movie,Sci-Fi,Thriller,MA15+
+Mindhunter,TV Show,Crime,Thriller,MA15+
+12 Angry Men,Movie,Drama,Thriller,G
+Bluey,TV Show,Animation,Family,G
+Good Will Hunting,Movie,Drama,Romance,M
+Arrested Development,TV Show,Comedy,Satire,PG
