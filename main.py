@@ -157,7 +157,6 @@ class nutflixCreateProfile(ctk.CTkFrame):
         ctk.CTkButton(self.frame_start, text="Create Profile", command=self.add_profile).grid(row=3, column=0, sticky="n")
     
     def add_profile(self):
-        rows = []
         profile_name = self.profile_name.get()
         profile_age_rating = self.age_rating.get()
         profile = [email, profile_name, profile_age_rating] # Email is a global value
@@ -165,14 +164,14 @@ class nutflixCreateProfile(ctk.CTkFrame):
         with open("profile_information.csv", "r") as file: # Csv containing profile information
             reader = csv.reader(file)
             for row in reader:
-                rows.append(row) # Reads the profile and appends values to an editable list
+                if (row[0], row[1]) == (email, profile_name):
+                    return # Profile with same name under same email already exists
 
-        with open("profile_information.csv", "w", newline="") as file:
-            writer = csv.DictWriter(file, fieldnames=profile) # Sets the field names to the details of the new profile
-            writer.writeheader()
-            writer.writerows
+        with open("profile_information.csv", "a", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(profile) # Adds profile to csv
             
-        # Needs to take you back to profile screen
+        self.controller.show_frame(nutflixStart) # Takes user back to the start page
  
 
 if __name__ == "__main__":
