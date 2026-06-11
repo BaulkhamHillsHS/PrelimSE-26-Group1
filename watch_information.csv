@@ -1,51 +1,51 @@
 name,movie_or_tv_show,genre1,genre2,age_rating,image
-The Shawshank Redemption,Movie,Drama,Mystery,MA15+,"images/media/The Shawshank Redemption.jpg"
-Breaking Bad,TV Show,Crime,Drama,MA15+,"images/media/Breaking Bad.jpg"
-Inception,Movie,Sci-Fi,Thriller,M,"images/media/Inception.jpg"
-Stranger Things,TV Show,Sci-Fi,Horror,MA15+,"images/media/Stranger Things.jpg"
-The Dark Knight,Movie,Action,Thriller,M,"images/media/The Dark Knight.jpg"
-Game of Thrones,TV Show,Fantasy,Drama,MA15+,"images/media/Game of Thrones.jpg"
-Interstellar,Movie,Sci-Fi,Drama,M,"images/media/Interstellar.jpg"
-The Office,TV Show,Comedy,Satire,PG,"images/media/The Office.jpg"
-Parasite,Movie,Thriller,Drama,MA15+,"images/media/Parasite.jpg"
-Chernobyl,TV Show,Drama,Historical,MA15+,"images/media/Chernobyl.jpg"
-The Godfather,Movie,Crime,Drama,R18+,"images/media/The Godfather.jpg"
-The Last of Us,TV Show,Action,Drama,MA15+,"images/media/The Last of Us.jpg"
-Pulp Fiction,Movie,Crime,Drama,R18+,"images/media/Pulp Fiction.jpg"
-Succession,TV Show,Drama,Satire,MA15+,"images/media/Succession.jpg"
-Oppenheimer,Movie,Historical,Drama,MA15+,"images/media/Oppenheimer.jpg"
-Severance,TV Show,Sci-Fi,Thriller,MA15+,"images/media/Severance.jpg"
-Dune,Movie,Sci-Fi,Adventure,M,"images/media/Dune.jpg"
-Peaky Blinders,TV Show,Crime,Drama,MA15+,"images/media/Peaky Blinders.jpg"
-Mad Max: Fury Road,Movie,Action,Sci-Fi,MA15+,"images/media/Mad Max Fury Road.jpg"
-Fleabag,TV Show,Comedy,Drama,MA15+,"images/media/Fleabag.jpg"
-Everything Everywhere All at Once,Movie,Sci-Fi,Comedy,MA15+,"images/media/Everything Everywhere All at Once.jpg"
-The Bear,TV Show,Drama,Comedy,MA15+,"images/media/The Bear.jpg"
-Whiplash,Movie,Drama,Music,M,"images/media/Whiplash.jpg"
-The Crown,TV Show,Historical,Drama,M,"images/media/The Crown.jpg"
-No Country for Old Men,Movie,Crime,Thriller,MA15+,"images/media/No Country for Old Men.jpg"
-Arcane,TV Show,Animation,Fantasy,M,"images/media/Arcane.jpg"
-Arrival,Movie,Sci-Fi,Drama,M,"images/media/Arrival.jpg"
-Squid Game,TV Show,Thriller,Drama,MA15+,"images/media/Squid Game.jpg"
-The Silence of the Lambs,Movie,Thriller,Horror,MA15+,"images/media/The Silence of the Lambs.jpg"
-Better Call Saul,TV Show,Crime,Drama,MA15+,"images/media/Better Call Saul.jpg"
-Spirited Away,Movie,Animation,Fantasy,G,"images/media/Spirited Away.jpg"
-Andor,TV Show,Sci-Fi,Action,M,"images/media/Andor.jpg"
-The Grand Budapest Hotel,Movie,Comedy,Drama,M,"images/media/The Grand Budapest Hotel.jpg"
-White Lotus,TV Show,Comedy,Drama,MA15+,"images/media/White Lotus.jpg"
-Gladiator,Movie,Action,Historical,MA15+,"images/media/Gladiator.jpg"
-Shogun,TV Show,Historical,Drama,MA15+,"images/media/Shogun.jpg"
-There Will Be Blood,Movie,Drama,Historical,M,"images/media/There Will Be Blood.jpg"
-Dark,TV Show,Sci-Fi,Mystery,MA15+,"images/media/Dark.jpg"
-Heat,Movie,Crime,Thriller,M,"images/media/Heat.jpg"
-True Detective,TV Show,Crime,Mystery,MA15+,"images/media/True Detective.jpg"
-The Truman Show,Movie,Drama,Sci-Fi,PG,"images/media/The Truman Show.jpg"
-Fargo,TV Show,Crime,Thriller,MA15+,"images/media/Fargo.jpg"
-A Beautiful Mind,Movie,Drama,Biopic,M,"images/media/A Beautiful Mind.jpg"
-The Wire,TV Show,Crime,Drama,MA15+,"images/media/The Wire.jpg"
-Blade Runner 2049,Movie,Sci-Fi,Thriller,MA15+,"images/media/Blade Runner 2049.jpg"
-Mindhunter,TV Show,Crime,Thriller,MA15+,"images/media/Mindhunter.jpg"
-12 Angry Men,Movie,Drama,Thriller,G,"images/media/12 Angry Men.jpg"
-Bluey,TV Show,Animation,Family,G,"images/media/Bluey.jpg"
-Good Will Hunting,Movie,Drama,Romance,M,"images/media/Good Will Hunting.jpg"
-Arrested Development,TV Show,Comedy,Satire,PG,"images/media/Arrested Development.jpg"
+The Shawshank Redemption,Movie,Drama,Mystery,MA15+,images/media/The Shawshank Redemption.jpg
+Breaking Bad,TV Show,Crime,Drama,MA15+,images/media/Breaking Bad.jpg
+Inception,Movie,Sci-Fi,Thriller,M,images/media/Inception.jpg
+Stranger Things,TV Show,Sci-Fi,Horror,MA15+,images/media/Stranger Things.jpg
+The Dark Knight,Movie,Action,Thriller,M,images/media/The Dark Knight.jpg
+Game of Thrones,TV Show,Fantasy,Drama,MA15+,images/media/Game of Thrones.jpg
+Interstellar,Movie,Sci-Fi,Drama,M,images/media/Interstellar.jpg
+The Office,TV Show,Comedy,Satire,PG,images/media/The Office.jpg
+Parasite,Movie,Thriller,Drama,MA15+,images/media/Parasite.jpg
+Chernobyl,TV Show,Drama,Historical,MA15+,images/media/Chernobyl.jpg
+The Godfather,Movie,Crime,Drama,R18+,images/media/The Godfather.jpg
+The Last of Us,TV Show,Action,Drama,MA15+,images/media/The Last of Us.jpg
+Pulp Fiction,Movie,Crime,Drama,R18+,images/media/Pulp Fiction.jpg
+Succession,TV Show,Drama,Satire,MA15+,images/media/Succession.jpg
+Oppenheimer,Movie,Historical,Drama,MA15+,images/media/Oppenheimer.jpg
+Severance,TV Show,Sci-Fi,Thriller,MA15+,images/media/Severance.jpg
+Dune,Movie,Sci-Fi,Adventure,M,images/media/Dune.jpg
+Peaky Blinders,TV Show,Crime,Drama,MA15+,images/media/Peaky Blinders.jpg
+Mad Max: Fury Road,Movie,Action,Sci-Fi,MA15+,images/media/Mad Max Fury Road.jpg
+Fleabag,TV Show,Comedy,Drama,MA15+,images/media/Fleabag.jpg
+Everything Everywhere All at Once,Movie,Sci-Fi,Comedy,MA15+,images/media/Everything Everywhere All at Once.jpg
+The Bear,TV Show,Drama,Comedy,MA15+,images/media/The Bear.jpg
+Whiplash,Movie,Drama,Music,M,images/media/Whiplash.jpg
+The Crown,TV Show,Historical,Drama,M,images/media/The Crown.jpg
+No Country for Old Men,Movie,Crime,Thriller,MA15+,images/media/No Country for Old Men.jpg
+Arcane,TV Show,Animation,Fantasy,M,images/media/Arcane.jpg
+Arrival,Movie,Sci-Fi,Drama,M,images/media/Arrival.jpg
+Squid Game,TV Show,Thriller,Drama,MA15+,images/media/Squid Game.jpg
+The Silence of the Lambs,Movie,Thriller,Horror,MA15+,images/media/The Silence of the Lambs.jpg
+Better Call Saul,TV Show,Crime,Drama,MA15+,images/media/Better Call Saul.jpg
+Spirited Away,Movie,Animation,Fantasy,G,images/media/Spirited Away.jpg
+Andor,TV Show,Sci-Fi,Action,M,images/media/Andor.jpg
+The Grand Budapest Hotel,Movie,Comedy,Drama,M,images/media/The Grand Budapest Hotel.jpg
+White Lotus,TV Show,Comedy,Drama,MA15+,images/media/White Lotus.jpg
+Gladiator,Movie,Action,Historical,MA15+,images/media/Gladiator.jpg
+Shogun,TV Show,Historical,Drama,MA15+,images/media/Shogun.jpg
+There Will Be Blood,Movie,Drama,Historical,M,images/media/There Will Be Blood.jpg
+Dark,TV Show,Sci-Fi,Mystery,MA15+,images/media/Dark.jpg
+Heat,Movie,Crime,Thriller,M,images/media/Heat.jpg
+True Detective,TV Show,Crime,Mystery,MA15+,images/media/True Detective.jpg
+The Truman Show,Movie,Drama,Sci-Fi,PG,images/media/The Truman Show.jpg
+Fargo,TV Show,Crime,Thriller,MA15+,images/media/Fargo.jpg
+A Beautiful Mind,Movie,Drama,Biopic,M,images/media/A Beautiful Mind.jpg
+The Wire,TV Show,Crime,Drama,MA15+,images/media/The Wire.jpg
+Blade Runner 2049,Movie,Sci-Fi,Thriller,MA15+,images/media/Blade Runner 2049.jpg
+Mindhunter,TV Show,Crime,Thriller,MA15+,images/media/Mindhunter.jpg
+12 Angry Men,Movie,Drama,Thriller,G,images/media/12 Angry Men.jpg
+Bluey,TV Show,Animation,Family,G,images/media/Bluey.jpg
+Good Will Hunting,Movie,Drama,Romance,M,images/media/Good Will Hunting.jpg
+Arrested Development,TV Show,Comedy,Satire,PG,images/media/Arrested Development.jpg
