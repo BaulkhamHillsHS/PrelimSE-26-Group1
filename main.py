@@ -74,7 +74,7 @@ class nutflixSignIn(ctk.CTkFrame):
         logo = ctk.CTkImage(light_image=logo_white, dark_image=logo_red, size=(30, 30))
 
         # Heading
-        ctk.CTkLabel(self.frame_form, text="Sign In", font=("Arial", 40), text_color="#890000").grid(row=0, column=0, padx=10, pady=10)
+        ctk.CTkLabel(self.frame_form, text="Sign In", font=("Arial", 40)).grid(row=0, column=0, padx=10, pady=10)
 
         # Text Input
         self.entry_username = ctk.CTkEntry(self.frame_form, placeholder_text="Username", height=50, width=300)
@@ -126,7 +126,7 @@ class nutflixStart(ctk.CTkFrame):
         logo = ctk.CTkImage(light_image=logo_white, dark_image=logo_red, size=(30, 30))
         
         #Heading
-        ctk.CTkLabel(self.frame_start, text="Who's Watching?", font=("Arial", 40), text_color="#890000").grid(row=0, column=1, padx=10, pady=10)
+        ctk.CTkLabel(self.frame_start, text="Who's Watching?", font=("Arial", 40)).grid(row=0, column=1, padx=10, pady=10)
 
         #Menu
         self.frame_profile_menu = ctk.CTkFrame(master=self.frame_start)
@@ -165,7 +165,7 @@ class nutflixCreateProfile(ctk.CTkFrame):
         self.frame_start.grid_columnconfigure((0), weight=1) 
         self.frame_start.grid_rowconfigure((0, 1, 2, 3), weight=1)
 
-        ctk.CTkLabel(self.frame_start, text="Create Account", font=("Arial", 40), text_color="#890000").grid(row=0, column=0, padx=10, pady=10)
+        ctk.CTkLabel(self.frame_start, text="Create Account", font=("Arial", 40)).grid(row=0, column=0, padx=10, pady=10)
         
         self.profile_name = ctk.CTkEntry(self.frame_start, placeholder_text="Profile Name", height=50, width=300)
         self.profile_name.grid(row=1, column=0, pady=10)
