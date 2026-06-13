@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from PIL import Image
+from PIL import Image, ImageEnhance
 import csv
 
 ctk.set_appearance_mode('dark')
@@ -7,6 +7,37 @@ ctk.set_default_color_theme("theme_nutflix.JSON")
 
 logo_red = Image.open("images/logo_red.png")
 logo_white = Image.open("images/logo_transparent.png")
+
+class medium:
+        def __init__(self, type):
+            self.type = type
+
+class genre(medium): # Inherits type (move or tv show) from medium()
+    def __init__(self, genre1, genre2, type):
+        super().__init__(type)
+        self.genre1 = genre1
+        self.genre2 = genre2
+
+class media(genre): # Inherits genres from genre(), called in get_media()
+    def __init__(self, name, type, genre1, genre2, age_rating, image):
+        super().__init__(genre1, genre2, type)
+        self.name = name
+        self.age_rating = age_rating
+        self.image = Image.open(image)
+    
+    def get_image(self): # Getter function for the widget to collect the image file
+        return self.image
+
+def get_media():
+        list = []
+        with open("watch_information.csv", "r") as file: # Open watch_information.csv and collect each movie/show
+            reader = csv.reader(file)
+            for row in reader:
+                m = media(row[0], row[1], row[2], row[3], row[4], row[5]) # name, type, genre1, genre2, age_rating, image
+                list.append(m) # Add movie/tv show to list
+        return list
+
+media_list = get_media() # Preload all media
 
 class nutflixApp(ctk.CTk):
     def __init__(self):
@@ -23,13 +54,13 @@ class nutflixApp(ctk.CTk):
         self.frames = {}
         
         # Create frame instances and store them
-        for f in (nutflixSignIn, nutflixStart, nutflixCreateProfile):
+        for f in (nutflixSignIn, nutflixStart, nutflixCreateProfile, nutflixBrowse):
             frame = f(self.container, self)
             self.frames[f] = frame
             frame.grid(row=0, column=0, sticky="nsew")
         
         # Show the sign in frame first
-        self.show_frame(nutflixSignIn)
+        self.show_frame(nutflixBrowse)
     
     def show_frame(self, cont):
         frame = self.frames[cont]
@@ -98,16 +129,12 @@ class nutflixSignIn(ctk.CTkFrame):
             print("Sign in failed")
 
     def validate_credentials(self, username, password):
-        try:
-            with open("account_information.csv", "r") as file:
-                reader = csv.reader(file)
-                for row in reader:
-                    if row[0] == username and row[1] == password:
-                        self.controller.set_user_information(row[0], row[1], row[2], row[3], row[4], row[5]) # Sets the current user details
-                        return True
-            return False
-        except FileNotFoundError:
-            return False
+        with open("account_information.csv", "r") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                if row[0] == username and row[1] == password:
+                    self.controller.set_user_information(row[0], row[1], row[2], row[3], row[4], row[5]) # Sets the current user details
+                    return True
 
 class nutflixStart(ctk.CTkFrame):
     def __init__(self, parent, controller):
@@ -193,7 +220,41 @@ class nutflixCreateProfile(ctk.CTkFrame):
             writer.writerow(profile) # Adds profile to csv
             
         self.controller.show_frame(nutflixStart) # Takes user back to the start page
- 
+    
+class nutflixBrowse(ctk.CTkFrame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
+
+        global media_list
+        self.build_ui(media_list)
+    
+    def build_ui(self, media):
+        self.scrollable_menu = ctk.CTkScrollableFrame(self)
+        self.scrollable_menu.pack(fill="both", expand=True)
+        
+        self.scrollable_menu.grid_columnconfigure((0, 1, 2, 3, 4, 5), weight=1) 
+        self.scrollable_menu.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6), weight=1)
+
+        for i in media: # Creates instance of media_widget in a grid layout
+            index = media.index(i)
+            row = index // 6 # 6 rows
+            col = index % 6 # (6-1) columns
+            self.media_widget(i).grid(row=row, column=col, padx=5, pady=5, sticky="n")
+    
+    def media_widget(self, media):
+        frame_thumbnail = ctk.CTkFrame(self.scrollable_menu)
+        # ImageEnhance dims the thumbnail image by 0.5
+        image_thumbnail = ctk.CTkImage(light_image=media.get_image(), dark_image=media.get_image(), size=(144, 81))
+
+        #Image of the widget
+        label_thumbnail = ctk.CTkLabel(frame_thumbnail, image=image_thumbnail, text="")
+        label_thumbnail.pack(fill="both", padx=1, pady=1)
+
+        self.label_thumbnail = label_thumbnail
+        self.image_thumbnail = image_thumbnail
+
+        return frame_thumbnail
 
 if __name__ == "__main__":
     app = nutflixApp()
