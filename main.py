@@ -194,27 +194,29 @@ class nutflixBrowse(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
-        images = self.get_media()
-        print(images)
-        self.build_ui(images)
+
+        media = self.get_media() # Load all movie and tv shows
+        self.build_ui(media)
     
-    def build_ui(self, images):
+    def build_ui(self, media):
         self.scrollable_menu = ctk.CTkScrollableFrame(self)
         self.scrollable_menu.pack(fill="both", expand=True)
         
         self.scrollable_menu.grid_columnconfigure((0, 1, 2, 3, 4, 5), weight=1) 
         self.scrollable_menu.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6), weight=1)
 
-        for i in images:
-            index = images.index(i)
-            row = index // 6
-            col = index % 6
-            self.media_widget(i).grid(row=row, column=col, padx=5, pady=5, sticky="nsew")
+        for i in media: # Creates instance of media_widget in a grid layout
+            index = media.index(i)
+            row = index // 6 # 6 rows
+            col = index % 6 # (6-1) columns
+            self.media_widget(i).grid(row=row, column=col, padx=5, pady=5, sticky="n")
     
-    def media_widget(self, image):
+    def media_widget(self, media):
         frame_thumbnail = ctk.CTkFrame(self.scrollable_menu)
-        image_thumbnail = ctk.CTkImage(light_image=ImageEnhance.Brightness(Image.open(image.get_image())).enhance(0.5), dark_image=ImageEnhance.Brightness(Image.open(image.get_image())).enhance(0.5), size=(144, 81))
+        # ImageEnhance dims the thumbnail image by 0.5
+        image_thumbnail = ctk.CTkImage(light_image=ImageEnhance.Brightness(Image.open(media.get_image())).enhance(0.5), dark_image=ImageEnhance.Brightness(Image.open(media.get_image())).enhance(0.5), size=(144, 81))
 
+        #Image of the widget
         label_thumbnail = ctk.CTkLabel(frame_thumbnail, image=image_thumbnail, text="")
         label_thumbnail.pack(fill="both", padx=1, pady=1)
 
@@ -225,31 +227,31 @@ class nutflixBrowse(ctk.CTkFrame):
     
     def get_media(self):
         media_list = []
-        with open("watch_information.csv", "r") as file:
+        with open("watch_information.csv", "r") as file: # Open watch_information.csv and collect each movie/show
             reader = csv.reader(file)
             for row in reader:
-                m = media(row[0], row[1], row[2], row[3], row[4], row[5])
-                media_list.append(m)
+                m = media(row[0], row[1], row[2], row[3], row[4], row[5]) # name, type, genre1, genre2, age_rating, image
+                media_list.append(m) # Add movie/tv show to list
         return media_list
     
 class medium:
         def __init__(self, type):
             self.type = type
 
-class genre(medium):
+class genre(medium): # Inherits type (move or tv show) from medium()
     def __init__(self, genre1, genre2, type):
         super().__init__(type)
         self.genre1 = genre1
         self.genre2 = genre2
 
-class media(genre):
+class media(genre): # Inherits genres from genre(), called in get_media()
     def __init__(self, name, type, genre1, genre2, age_rating, image):
         super().__init__(genre1, genre2, type)
         self.name = name
         self.age_rating = age_rating
         self.image = image
     
-    def get_image(self):
+    def get_image(self): # Getter function for the widget to collect the image file
         return self.image
 
 if __name__ == "__main__":
