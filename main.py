@@ -195,6 +195,7 @@ class nutflixBrowse(ctk.CTkFrame):
         super().__init__(parent)
         self.controller = controller
         images = self.get_media()
+        print(images)
         self.build_ui(images)
     
     def build_ui(self, images):
@@ -208,11 +209,11 @@ class nutflixBrowse(ctk.CTkFrame):
             index = images.index(i)
             row = index // 6
             col = index % 6
-            self.media_widget(str(i)).grid(row=row, column=col, padx=5, pady=5, sticky="nsew")
+            self.media_widget(i).grid(row=row, column=col, padx=5, pady=5, sticky="nsew")
     
     def media_widget(self, image):
         frame_thumbnail = ctk.CTkFrame(self.scrollable_menu)
-        image_thumbnail = ctk.CTkImage(light_image=ImageEnhance.Brightness(Image.open(image)).enhance(0.5), dark_image=ImageEnhance.Brightness(Image.open(image)).enhance(0.5), size=(144, 81))
+        image_thumbnail = ctk.CTkImage(light_image=ImageEnhance.Brightness(Image.open(image.get_image())).enhance(0.5), dark_image=ImageEnhance.Brightness(Image.open(image.get_image())).enhance(0.5), size=(144, 81))
 
         label_thumbnail = ctk.CTkLabel(frame_thumbnail, image=image_thumbnail, text="")
         label_thumbnail.pack(fill="both", padx=1, pady=1)
@@ -223,29 +224,33 @@ class nutflixBrowse(ctk.CTkFrame):
         return frame_thumbnail
     
     def get_media(self):
-        images = []
+        media_list = []
         with open("watch_information.csv", "r") as file:
             reader = csv.reader(file)
             for row in reader:
-                image = row[5]
-                images.append(image)
-        return images
-
-
-    class media():
+                m = media(row[0], row[1], row[2], row[3], row[4], row[5])
+                media_list.append(m)
+        return media_list
+    
+class medium:
         def __init__(self, type):
             self.type = type
 
-        class medium():
-            def __init__(self, name, genre1, genre2, age_rating, image):
-                super.__init__
-                self.name = name
-                self.genre1 = genre1
-                self.genre2 = genre2
-                self.age_rating = age_rating
-                self.image = image
-    
+class genre(medium):
+    def __init__(self, genre1, genre2, type):
+        super().__init__(type)
+        self.genre1 = genre1
+        self.genre2 = genre2
 
+class media(genre):
+    def __init__(self, name, type, genre1, genre2, age_rating, image):
+        super().__init__(genre1, genre2, type)
+        self.name = name
+        self.age_rating = age_rating
+        self.image = image
+    
+    def get_image(self):
+        return self.image
 
 if __name__ == "__main__":
     app = nutflixApp()
