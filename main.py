@@ -197,22 +197,25 @@ class nutflixBrowse(ctk.CTkFrame):
         self.build_ui()
     
     def build_ui(self):
-        self.frame_menu = ctk.CTkFrame(self)
-        self.frame_menu.pack(fill="both", expand=True)
+        self.scrollable_menu = ctk.CTkScrollableFrame(self)
+        self.scrollable_menu.pack(fill="both", expand=True)
         
-        self.frame_menu.grid_columnconfigure((0, 1, 2, 3, 4, 5), weight=1) 
-        self.frame_menu.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6, 7), weight=1)
+        self.scrollable_menu.grid_columnconfigure((0, 1, 2, 3, 4, 5), weight=1) 
+        self.scrollable_menu.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6), weight=1)
 
         images = self.get_media()
         for i in images:
-            self.media_widget(str(i)).grid(row=images.index(i), column=images.index(i))
+            index = images.index(i)
+            row = index // 6
+            col = index % 6
+            self.media_widget(str(i)).grid(row=row, column=col, padx=2, pady=5, sticky="nsew")
     
     def media_widget(self, image):
-        frame_thumbnail = ctk.CTkFrame(self.frame_menu)
-        image_thumbnail = ctk.CTkImage(light_image=Image.open(image), dark_image=Image.open(image), size=(320, 180))
+        frame_thumbnail = ctk.CTkFrame(self.scrollable_menu)
+        image_thumbnail = ctk.CTkImage(light_image=Image.open(image), dark_image=Image.open(image), size=(144, 81))
 
         label_thumbnail = ctk.CTkLabel(frame_thumbnail, image=image_thumbnail, text="")
-        label_thumbnail.pack(padx=1, pady=1)
+        label_thumbnail.pack(fill="both", padx=1, pady=1)
 
         self.label_thumbnail = label_thumbnail
         self.image_thumbnail = image_thumbnail
