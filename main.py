@@ -23,7 +23,7 @@ class nutflixApp(ctk.CTk):
         self.frames = {}
         
         # Create frame instances and store them
-        for f in (nutflixSignIn, nutflixStart, nutflixCreateProfile):
+        for f in (nutflixSignIn, nutflixStart, nutflixCreateProfile, nutflixMenu):
             frame = f(self.container, self)
             self.frames[f] = frame
             frame.grid(row=0, column=0, sticky="nsew")
@@ -193,7 +193,39 @@ class nutflixCreateProfile(ctk.CTkFrame):
             writer.writerow(profile) # Adds profile to csv
             
         self.controller.show_frame(nutflixStart) # Takes user back to the start page
- 
+    
+class nutflixBrowse(ctk.CTkFrame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
+        self.build_ui()
+    
+    def build_ui(self):
+        self.frame_menu = ctk.CTkFrame(self)
+        self.frame_menu.pack(fill="both", expand=True)
+        
+        self.frame_menu.grid_columnconfigure((0), weight=1) 
+        self.frame_menu.grid_rowconfigure((0, 1, 2, 3), weight=1)
+    
+    def media_widget(self):
+        self.frame_thumbnail = ctk.CTkFrame(self)
+
+        self.label_
+    
+    class media():
+        def __init__(self, type):
+            self.type = type
+
+        class medium():
+            def __init__(self, name, genre1, genre2, age_rating, image):
+                super.__init__
+                self.name = name
+                self.genre1 = genre1
+                self.genre2 = genre2
+                self.age_rating = age_rating
+                self.image = image
+    
+
 
 if __name__ == "__main__":
     app = nutflixApp()
