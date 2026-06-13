@@ -23,13 +23,13 @@ class nutflixApp(ctk.CTk):
         self.frames = {}
         
         # Create frame instances and store them
-        for f in (nutflixSignIn, nutflixStart, nutflixCreateProfile, nutflixMenu):
+        for f in (nutflixSignIn, nutflixStart, nutflixCreateProfile, nutflixBrowse):
             frame = f(self.container, self)
             self.frames[f] = frame
             frame.grid(row=0, column=0, sticky="nsew")
         
         # Show the sign in frame first
-        self.show_frame(nutflixSignIn)
+        self.show_frame(nutflixBrowse)
     
     def show_frame(self, cont):
         frame = self.frames[cont]
@@ -206,12 +206,22 @@ class nutflixBrowse(ctk.CTkFrame):
         
         self.frame_menu.grid_columnconfigure((0), weight=1) 
         self.frame_menu.grid_rowconfigure((0, 1, 2, 3), weight=1)
+
+        self.media_widget().grid(row=0, column=1)
     
     def media_widget(self):
-        self.frame_thumbnail = ctk.CTkFrame(self)
+        frame_thumbnail = ctk.CTkFrame(self.frame_menu)
+        image_thumbnail = ctk.CTkImage(light_image=Image.open("images/media/Squid Game.jpg"), dark_image=Image.open("images/media/Squid Game.jpg"), size=(320, 180))
 
-        self.label_
+        label_thumbnail = ctk.CTkLabel(frame_thumbnail, image=image_thumbnail, text="")
+        label_thumbnail.pack(padx=1, pady=1)
+
+        return frame_thumbnail
     
+    
+
+
+
     class media():
         def __init__(self, type):
             self.type = type
