@@ -1,4 +1,3 @@
-name,movie_or_tv_show,genre1,genre2,age_rating,image
 The Shawshank Redemption,Movie,Drama,Mystery,MA15+,images/media/The Shawshank Redemption.jpg
 Breaking Bad,TV Show,Crime,Drama,MA15+,images/media/Breaking Bad.jpg
 Inception,Movie,Sci-Fi,Thriller,M,images/media/Inception.jpg
@@ -33,7 +32,7 @@ Spirited Away,Movie,Animation,Fantasy,G,images/media/Spirited Away.jpg
 Andor,TV Show,Sci-Fi,Action,M,images/media/Andor.jpg
 The Grand Budapest Hotel,Movie,Comedy,Drama,M,images/media/The Grand Budapest Hotel.jpg
 White Lotus,TV Show,Comedy,Drama,MA15+,images/media/White Lotus.jpg
-Gladiator,Movie,Action,Historical,MA15+,images/media/Gladiator.jpg
+Gladiator,Movie,Action,Historical,MA15+,images/media/Gladiator.png
 Shogun,TV Show,Historical,Drama,MA15+,images/media/Shogun.jpg
 There Will Be Blood,Movie,Drama,Historical,M,images/media/There Will Be Blood.jpg
 Dark,TV Show,Sci-Fi,Mystery,MA15+,images/media/Dark.jpg

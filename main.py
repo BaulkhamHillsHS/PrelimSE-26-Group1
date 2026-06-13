@@ -98,16 +98,12 @@ class nutflixSignIn(ctk.CTkFrame):
             print("Sign in failed")
 
     def validate_credentials(self, username, password):
-        try:
-            with open("account_information.csv", "r") as file:
-                reader = csv.reader(file)
-                for row in reader:
-                    if row[0] == username and row[1] == password:
-                        self.controller.set_user_information(row[0], row[1], row[2], row[3], row[4], row[5]) # Sets the current user details
-                        return True
-            return False
-        except FileNotFoundError:
-            return False
+        with open("account_information.csv", "r") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                if row[0] == username and row[1] == password:
+                    self.controller.set_user_information(row[0], row[1], row[2], row[3], row[4], row[5]) # Sets the current user details
+                    return True
 
 class nutflixStart(ctk.CTkFrame):
     def __init__(self, parent, controller):
@@ -204,22 +200,33 @@ class nutflixBrowse(ctk.CTkFrame):
         self.frame_menu = ctk.CTkFrame(self)
         self.frame_menu.pack(fill="both", expand=True)
         
-        self.frame_menu.grid_columnconfigure((0), weight=1) 
-        self.frame_menu.grid_rowconfigure((0, 1, 2, 3), weight=1)
+        self.frame_menu.grid_columnconfigure((0, 1, 2, 3, 4, 5), weight=1) 
+        self.frame_menu.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6, 7), weight=1)
 
-        self.media_widget().grid(row=0, column=1)
+        images = self.get_media()
+        for i in images:
+            self.media_widget(str(i)).grid(row=images.index(i), column=images.index(i))
     
-    def media_widget(self):
+    def media_widget(self, image):
         frame_thumbnail = ctk.CTkFrame(self.frame_menu)
-        image_thumbnail = ctk.CTkImage(light_image=Image.open("images/media/Squid Game.jpg"), dark_image=Image.open("images/media/Squid Game.jpg"), size=(320, 180))
+        image_thumbnail = ctk.CTkImage(light_image=Image.open(image), dark_image=Image.open(image), size=(320, 180))
 
         label_thumbnail = ctk.CTkLabel(frame_thumbnail, image=image_thumbnail, text="")
         label_thumbnail.pack(padx=1, pady=1)
 
+        self.label_thumbnail = label_thumbnail
+        self.image_thumbnail = image_thumbnail
+
         return frame_thumbnail
     
-    
-
+    def get_media(self):
+        images = []
+        with open("watch_information.csv", "r") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                image = row[5]
+                images.append(image)
+        return images
 
 
     class media():
