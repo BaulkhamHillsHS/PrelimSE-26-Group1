@@ -8,6 +8,37 @@ ctk.set_default_color_theme("theme_nutflix.JSON")
 logo_red = Image.open("images/logo_red.png")
 logo_white = Image.open("images/logo_transparent.png")
 
+class medium:
+        def __init__(self, type):
+            self.type = type
+
+class genre(medium): # Inherits type (move or tv show) from medium()
+    def __init__(self, genre1, genre2, type):
+        super().__init__(type)
+        self.genre1 = genre1
+        self.genre2 = genre2
+
+class media(genre): # Inherits genres from genre(), called in get_media()
+    def __init__(self, name, type, genre1, genre2, age_rating, image):
+        super().__init__(genre1, genre2, type)
+        self.name = name
+        self.age_rating = age_rating
+        self.image = Image.open(image)
+    
+    def get_image(self): # Getter function for the widget to collect the image file
+        return self.image
+
+def get_media():
+        list = []
+        with open("watch_information.csv", "r") as file: # Open watch_information.csv and collect each movie/show
+            reader = csv.reader(file)
+            for row in reader:
+                m = media(row[0], row[1], row[2], row[3], row[4], row[5]) # name, type, genre1, genre2, age_rating, image
+                list.append(m) # Add movie/tv show to list
+        return list
+
+media_list = get_media() # Preload all media
+
 class nutflixApp(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -195,8 +226,8 @@ class nutflixBrowse(ctk.CTkFrame):
         super().__init__(parent)
         self.controller = controller
 
-        media = self.get_media() # Load all movie and tv shows
-        self.build_ui(media)
+        global media_list
+        self.build_ui(media_list)
     
     def build_ui(self, media):
         self.scrollable_menu = ctk.CTkScrollableFrame(self)
@@ -214,7 +245,7 @@ class nutflixBrowse(ctk.CTkFrame):
     def media_widget(self, media):
         frame_thumbnail = ctk.CTkFrame(self.scrollable_menu)
         # ImageEnhance dims the thumbnail image by 0.5
-        image_thumbnail = ctk.CTkImage(light_image=ImageEnhance.Brightness(Image.open(media.get_image())).enhance(0.5), dark_image=ImageEnhance.Brightness(Image.open(media.get_image())).enhance(0.5), size=(144, 81))
+        image_thumbnail = ctk.CTkImage(light_image=media.get_image(), dark_image=media.get_image(), size=(144, 81))
 
         #Image of the widget
         label_thumbnail = ctk.CTkLabel(frame_thumbnail, image=image_thumbnail, text="")
@@ -224,35 +255,6 @@ class nutflixBrowse(ctk.CTkFrame):
         self.image_thumbnail = image_thumbnail
 
         return frame_thumbnail
-    
-    def get_media(self):
-        media_list = []
-        with open("watch_information.csv", "r") as file: # Open watch_information.csv and collect each movie/show
-            reader = csv.reader(file)
-            for row in reader:
-                m = media(row[0], row[1], row[2], row[3], row[4], row[5]) # name, type, genre1, genre2, age_rating, image
-                media_list.append(m) # Add movie/tv show to list
-        return media_list
-    
-class medium:
-        def __init__(self, type):
-            self.type = type
-
-class genre(medium): # Inherits type (move or tv show) from medium()
-    def __init__(self, genre1, genre2, type):
-        super().__init__(type)
-        self.genre1 = genre1
-        self.genre2 = genre2
-
-class media(genre): # Inherits genres from genre(), called in get_media()
-    def __init__(self, name, type, genre1, genre2, age_rating, image):
-        super().__init__(genre1, genre2, type)
-        self.name = name
-        self.age_rating = age_rating
-        self.image = image
-    
-    def get_image(self): # Getter function for the widget to collect the image file
-        return self.image
 
 if __name__ == "__main__":
     app = nutflixApp()
