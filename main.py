@@ -233,19 +233,19 @@ class nutflixBrowse(ctk.CTkFrame):
         self.scrollable_menu = ctk.CTkScrollableFrame(self)
         self.scrollable_menu.pack(fill="both", expand=True)
         
-        self.scrollable_menu.grid_columnconfigure((0, 1, 2, 3, 4, 5), weight=1) 
-        self.scrollable_menu.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6), weight=1)
+        self.scrollable_menu.grid_columnconfigure((0, 1, 2, 3, 4), weight=1) 
+        self.scrollable_menu.grid_rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
 
         for i in media: # Creates instance of media_widget in a grid layout
             index = media.index(i)
-            row = index // 6 # 6 rows
-            col = index % 6 # (6-1) columns
+            row = index // 5 # 5 rows
+            col = index % 5 # (5-1) columns
             self.media_widget(i).grid(row=row, column=col, padx=5, pady=5, sticky="n")
     
     def media_widget(self, media):
         frame_thumbnail = ctk.CTkFrame(self.scrollable_menu)
         # ImageEnhance dims the thumbnail image by 0.5
-        image_thumbnail = ctk.CTkImage(light_image=media.get_image(), dark_image=media.get_image(), size=(144, 81))
+        image_thumbnail = ctk.CTkImage(light_image=media.get_image(), dark_image=media.get_image(), size=(192, 108))
 
         #Image of the widget
         label_thumbnail = ctk.CTkLabel(frame_thumbnail, image=image_thumbnail, text="")
