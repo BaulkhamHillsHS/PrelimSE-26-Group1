@@ -24,6 +24,9 @@ class media(genre): # Inherits genres from genre(), called in get_media()
         self.name = name
         self.age_rating = age_rating
         self.image = Image.open(image)
+
+    def get_name(self): # Getter function for the widget to collect the name
+        return self.name
     
     def get_image(self): # Getter function for the widget to collect the image file
         return self.image
@@ -54,7 +57,7 @@ class nutflixApp(ctk.CTk):
         self.frames = {}
         
         # Create frame instances and store them
-        for f in (nutflixSignIn, nutflixStart, nutflixCreateProfile, nutflixBrowse):
+        for f in (nutflixSignIn, nutflixStart, nutflixCreateProfile, nutflixBrowse, nutflixWatch):
             frame = f(self.container, self)
             self.frames[f] = frame
             frame.grid(row=0, column=0, sticky="nsew")
@@ -249,12 +252,31 @@ class nutflixBrowse(ctk.CTkFrame):
 
         #Image of the widget
         label_thumbnail = ctk.CTkLabel(frame_thumbnail, image=image_thumbnail, text="")
-        label_thumbnail.pack(fill="both", padx=1, pady=1)
+
+        #Button of the widget
+        label_thumbnail = ctk.CTkButton(frame_thumbnail, text=media.get_name(), command=self.watch)
+        label_thumbnail.place(relx=0, rely=0, relwidth=1, relheight=1) # Overlays the button over the image
 
         self.label_thumbnail = label_thumbnail
         self.image_thumbnail = image_thumbnail
 
         return frame_thumbnail
+
+    def watch(self):
+        self.controller.show_frame(nutflixWatch)
+
+class nutflixWatch(ctk.CTkFrame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
+        self.build_ui()
+    
+    def build_ui(self):
+        self.frame_start = ctk.CTkFrame(self)
+        self.frame_start.pack(fill="both", expand=True)
+        
+        self.frame_start.grid_columnconfigure((0), weight=1) 
+        self.frame_start.grid_rowconfigure((0, 1, 2, 3), weight=1)
 
 if __name__ == "__main__":
     app = nutflixApp()
