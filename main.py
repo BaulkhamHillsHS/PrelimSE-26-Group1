@@ -90,6 +90,15 @@ class nutflixApp(ctk.CTk):
             return self.plan
         if parameter == "profile_count":
             return self.current_user_profile_count
+    
+    def set_watching(self, watching): # Setter function for setting the show/movie the user is currently watching
+        self.watching = watching
+    
+    def get_watching(self): # Getter function to know which show/movie the user is watching
+        try:
+            return self.watching
+        except:
+            print("User is not watching...")
 
 class nutflixSignIn(ctk.CTkFrame):
     def __init__(self, parent, controller):
@@ -232,15 +241,15 @@ class nutflixBrowse(ctk.CTkFrame):
         global media_list
         self.build_ui(media_list)
     
-    def build_ui(self, media):
+    def build_ui(self, media_list):
         self.scrollable_menu = ctk.CTkScrollableFrame(self)
         self.scrollable_menu.pack(fill="both", expand=True)
         
         self.scrollable_menu.grid_columnconfigure((0, 1, 2, 3, 4), weight=1) 
         self.scrollable_menu.grid_rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
 
-        for i in media: # Creates instance of media_widget in a grid layout
-            index = media.index(i)
+        for i in media_list: # Creates instance of media_widget in a grid layout
+            index = media_list.index(i)
             row = index // 5 # 5 rows
             col = index % 5 # (5-1) columns
             self.media_widget(i).grid(row=row, column=col, padx=10, pady=20, sticky="nsew")
@@ -255,20 +264,22 @@ class nutflixBrowse(ctk.CTkFrame):
         # image_thumbnail = ctk.CTkImage(light_image=media.get_image(), dark_image=media.get_image(), size=(192, 108))
 
         #Button of the widget
-        label_thumbnail = ctk.CTkButton(frame_thumbnail, text=name, height=126, width=192, command=self.watch)
+        label_thumbnail = ctk.CTkButton(frame_thumbnail, text=name, height=126, width=192, command=lambda: self.watch(media))
         label_thumbnail.pack(fill="both", padx=0, pady=0)
 
         self.label_thumbnail = label_thumbnail
 
         return frame_thumbnail
 
-    def watch(self):
-        self.controller.show_frame(nutflixWatch)
+    def watch(self, media):
+        self.controller.set_watching(media)
+        self.controller.show_frame(nutflixWatch) # Todo: Create a new function in NutflixApp for specifically handling nutflixWatch()
 
 class nutflixWatch(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
+        
         self.build_ui()
     
     def build_ui(self):
@@ -277,6 +288,9 @@ class nutflixWatch(ctk.CTkFrame):
         
         self.frame_start.grid_columnconfigure((0), weight=1) 
         self.frame_start.grid_rowconfigure((0, 1, 2, 3), weight=1)
+    
+    
+        
 
 if __name__ == "__main__":
     app = nutflixApp()
