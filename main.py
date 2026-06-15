@@ -243,22 +243,22 @@ class nutflixBrowse(ctk.CTkFrame):
             index = media.index(i)
             row = index // 5 # 5 rows
             col = index % 5 # (5-1) columns
-            self.media_widget(i).grid(row=row, column=col, padx=5, pady=5, sticky="n")
+            self.media_widget(i).grid(row=row, column=col, padx=10, pady=20, sticky="nsew")
     
     def media_widget(self, media):
+        name = media.get_name()
+        if len(name) > 20: # Ensures that the widget doesnt not stretch out or cut off text abruptly
+            name = name[:20] + "..."
+        
         frame_thumbnail = ctk.CTkFrame(self.scrollable_menu)
-        # ImageEnhance dims the thumbnail image by 0.5
-        image_thumbnail = ctk.CTkImage(light_image=media.get_image(), dark_image=media.get_image(), size=(192, 108))
 
-        #Image of the widget
-        label_thumbnail = ctk.CTkLabel(frame_thumbnail, image=image_thumbnail, text="")
+        # image_thumbnail = ctk.CTkImage(light_image=media.get_image(), dark_image=media.get_image(), size=(192, 108))
 
         #Button of the widget
-        label_thumbnail = ctk.CTkButton(frame_thumbnail, text=media.get_name(), command=self.watch)
-        label_thumbnail.place(relx=0, rely=0, relwidth=1, relheight=1) # Overlays the button over the image
+        label_thumbnail = ctk.CTkButton(frame_thumbnail, text=name, height=126, width=192, command=self.watch)
+        label_thumbnail.pack(fill="both", padx=0, pady=0)
 
         self.label_thumbnail = label_thumbnail
-        self.image_thumbnail = image_thumbnail
 
         return frame_thumbnail
 
