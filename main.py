@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from PIL import Image, ImageEnhance
 import csv
+import random
 
 ctk.set_appearance_mode('dark')
 ctk.set_default_color_theme("theme_nutflix.JSON")
