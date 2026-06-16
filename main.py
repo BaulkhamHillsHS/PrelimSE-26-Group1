@@ -44,6 +44,9 @@ def get_media():
 media_list = get_media() # Preload all media
 
 class account:
+    global current_account_profiles # List of all profiles under the account, Note: temporary, must be moved to when logging in
+    current_account_profiles = []
+    
     def __init__(self, username, password, email, plan, profiles):
         self.current_user_username = username
         self.current_user_password = password
@@ -65,7 +68,7 @@ class account:
         if parameter == "profile_count":
             return self.current_user_profile_count
     
-    def profile_added(self): # Called when the user adds a new profile
+    def profile_added(self, name, age_rating): # Called when the user adds a new profile
         count = int(self.current_user_profiles) + 1
         self.current_user_profiles = str(count)
 
@@ -81,7 +84,15 @@ class account:
         with open("account_information.csv", "w", newline="") as file: # Rewrites the 'account_information.csv' using the updated rows
             writer = csv.writer(file)
             writer.writerows(updated_rows)
+        
+        new_profile = profile(name, age_rating, self.current_user_username, self.current_user_password, self.current_user_email, self.current_user_plan, self.current_user_profiles)
+        current_account_profiles.append(new_profile)
 
+class profile(account):
+    def __init__(self, name, age_rating, username, password, email, plan, profiles):
+        super().__init__(username, password, email, plan, profiles)
+        self.name = name
+        self.age_rating = age_rating
 
 class nutflixApp(ctk.CTk):
     def __init__(self):
@@ -166,7 +177,13 @@ class nutflixSignIn(ctk.CTkFrame):
                 if row[0] == username and row[1] == password:
                     global current_account # This becomes the currently logged in account
                     current_account = account(row[0], row[1], row[2], row[3], row[4]) # Sets the current user details
+                    self.get_existing_profiles(row[2])
                     return True
+    
+    def get_existing_profiles(self, email):
+        ...
+
+
 
 class nutflixStart(ctk.CTkFrame):
     def __init__(self, parent, controller):
@@ -251,7 +268,7 @@ class nutflixCreateProfile(ctk.CTkFrame):
             writer = csv.writer(file)
             writer.writerow(profile) # Adds profile to csv
         
-        current_account.profile_added() # Immediately updates the profile count of the current account by +1   
+        current_account.profile_added(profile_name, profile_age_rating) # Immediately updates the profile count of the current account by +1   
         self.controller.show_frame(nutflixStart) # Takes user back to the start page
     
 class nutflixBrowse(ctk.CTkFrame):
