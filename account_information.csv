@@ -1,6 +1,3 @@
-email,password,full_name,plan,profile_count,profile1,profile2,profile3,profile4
-auausten@yahoo.com,password123,Austen Au,Premium,3,joe,jowe,cho,chowseff
-kayhanfromthecakirs@gmail.com,gamer#123,Kayhan Cakir,Premium,2,joe,jowe,cho,chowseff
-habeb.rizmi@gmail.com,habibi#67,Habeb Rizmi,Standard,1,joe,jowe
-sivaram.sundaresan@education.nsw.gov.au,rizz.678,Sivaram Sundaresan,Standard,1,joe,jowe
-mrdunne@gmail.com,t786@97h3jb789\}[bgvub60098&%%9)(``,Mr Dunne,Premium,2,joe,jowe,cho,chowseff
+username,password,email,plan,profiles
+auausten,password123,auausten@yahoo.com,Premium,2
+MrDunne,Baulko11!!,ryan.dunne9@det.nsw.edu.au,Premium,2
