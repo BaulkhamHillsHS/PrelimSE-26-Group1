@@ -38,6 +38,7 @@ def get_media():
             for row in reader:
                 m = media(row[0], row[1], row[2], row[3], row[4], row[5]) # name, type, genre1, genre2, age_rating, image
                 list.append(m) # Add movie/tv show to list
+        
         return list
 
 media_list = get_media() # Preload all media
@@ -259,15 +260,24 @@ class nutflixBrowse(ctk.CTkFrame):
         if len(name) > 20: # Ensures that the widget doesnt not stretch out or cut off text abruptly
             name = name[:20] + "..."
         
-        frame_thumbnail = ctk.CTkFrame(self.scrollable_menu)
+        frame_thumbnail = ctk.CTkFrame(self.scrollable_menu, corner_radius=6, fg_color="#C0152A")
+        
+        # Button of the widget
+        label_thumbnail = ctk.CTkLabel(frame_thumbnail, text=name, height=126, width=192, corner_radius=6, bg_color="#C0152A")
+        label_thumbnail.pack(fill="both", expand=True)
 
-        # image_thumbnail = ctk.CTkImage(light_image=media.get_image(), dark_image=media.get_image(), size=(192, 108))
-
-        #Button of the widget
-        label_thumbnail = ctk.CTkButton(frame_thumbnail, text=name, height=126, width=192, command=lambda: self.watch(media))
-        label_thumbnail.pack(fill="both", padx=0, pady=0)
-
-        self.label_thumbnail = label_thumbnail
+        # Hover Preview
+        image = ctk.CTkImage(light_image=media.get_image(), dark_image=media.get_image(), size=(180, 116))
+        
+        def show_image(event):
+            label_thumbnail.configure(image=image)
+        
+        def hide_image(event):
+            label_thumbnail.configure(image="")
+        
+        label_thumbnail.bind("<Enter>", show_image)
+        label_thumbnail.bind("<Leave>", hide_image)
+        label_thumbnail.bind("<Button-1>", lambda e: self.watch(media))
 
         return frame_thumbnail
 
