@@ -44,9 +44,6 @@ def get_media():
 media_list = get_media() # Preload all media
 
 class account:
-    global current_account_profiles # List of all profiles under the account, Note: temporary, must be moved to when logging in
-    current_account_profiles = []
-    
     def __init__(self, username, password, email, plan, profiles):
         self.current_user_username = username
         self.current_user_password = password
@@ -177,13 +174,21 @@ class nutflixSignIn(ctk.CTkFrame):
                 if row[0] == username and row[1] == password:
                     global current_account # This becomes the currently logged in account
                     current_account = account(row[0], row[1], row[2], row[3], row[4]) # Sets the current user details
-                    self.get_existing_profiles(row[2])
+                    self.get_existing_profiles(row[0], row[1], row[2], row[3], row[4])
                     return True
     
-    def get_existing_profiles(self, email):
-        ...
+    def get_existing_profiles(self, username, password, email, plan, profiles):
+        with open("profile_information.csv", "r") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                if row[0] == email:
+                    current_profile = profile(row[1], row[2], username, password, email, plan, profiles)
 
+                    global current_account_profiles # List of all profiles under the account
+                    current_account_profiles = []
+                    current_account_profiles.append(current_profile)
 
+                    print(current_account_profiles)
 
 class nutflixStart(ctk.CTkFrame):
     def __init__(self, parent, controller):
