@@ -9,8 +9,8 @@ logo_red = Image.open("images/logo_red.png")
 logo_white = Image.open("images/logo_transparent.png")
 
 class medium:
-        def __init__(self, type):
-            self.type = type
+    def __init__(self, type):
+        self.type = type
 
 class genre(medium): # Inherits type (move or tv show) from medium()
     def __init__(self, genre1, genre2, type):
@@ -288,9 +288,6 @@ class nutflixWatch(ctk.CTkFrame):
         
         self.frame_start.grid_columnconfigure((0), weight=1) 
         self.frame_start.grid_rowconfigure((0, 1, 2, 3), weight=1)
-    
-    
-        
 
 if __name__ == "__main__":
     app = nutflixApp()
