@@ -9,6 +9,8 @@ ctk.set_default_color_theme("theme_nutflix.JSON")
 logo_red = Image.open("images/logo_red.png")
 logo_white = Image.open("images/logo_transparent.png")
 
+age_rating_order = ["G", "PG", "M", "MA15+", "R18+"] # Used for comparing age ratings of profiles and media
+
 class medium:
     def __init__(self, type):
         self.type = type
@@ -33,14 +35,14 @@ class media(genre): # Inherits genres from genre(), called in get_media()
         return self.image
 
 def get_media():
-        list = []
-        with open("watch_information.csv", "r") as file: # Open watch_information.csv and collect each movie/show
-            reader = csv.reader(file)
-            for row in reader:
-                m = media(row[0], row[1], row[2], row[3], row[4], row[5]) # name, type, genre1, genre2, age_rating, image
-                list.append(m) # Add movie/tv show to list
+    list = []
+    with open("watch_information.csv", "r") as file: # Open watch_information.csv and collect each movie/show
+        reader = csv.reader(file)
+        for row in reader:
+            m = media(row[0], row[1], row[2], row[3], row[4], row[5]) # name, type, genre1, genre2, age_rating, image
+            list.append(m) # Add movie/tv show to list
         
-        return list
+    return list
 
 media_list = get_media() # Preload all media
 
@@ -65,7 +67,7 @@ class nutflixApp(ctk.CTk):
             frame.grid(row=0, column=0, sticky="nsew")
         
         # Show the sign in frame first
-        self.show_frame(nutflixBrowse)
+        self.show_frame(nutflixSignIn)
     
     def show_frame(self, cont):
         frame = self.frames[cont]
@@ -122,7 +124,7 @@ class nutflixSignIn(ctk.CTkFrame):
         ctk.CTkLabel(self.frame_form, text="Sign In", font=("Arial", 40)).grid(row=0, column=0, padx=10, pady=10)
 
         # Text Input
-        self.entry_username = ctk.CTkEntry(self.frame_form, placeholder_text="Username", height=50, width=300)
+        self.entry_username = ctk.CTkEntry(self.frame_form, placeholder_text="Email", height=50, width=300)
         self.entry_username.grid(row=1, column=0, sticky="n")
         self.entry_password = ctk.CTkEntry(self.frame_form, placeholder_text="Password", height=50, width=300)
         self.entry_password.grid(row=2, column=0, sticky="n")
@@ -142,11 +144,11 @@ class nutflixSignIn(ctk.CTkFrame):
         else:
             print("Sign in failed")
 
-    def validate_credentials(self, username, password):
+    def validate_credentials(self, email, password):
         with open("account_information.csv", "r") as file:
             reader = csv.reader(file)
             for row in reader:
-                if row[0] == username and row[1] == password:
+                if row[0] == email and row[1] == password:
                     self.controller.set_user_information(row[0], row[1], row[2], row[3], row[4], row[5]) # Sets the current user details
                     return True
 
@@ -174,7 +176,6 @@ class nutflixStart(ctk.CTkFrame):
         self.frame_profile_menu.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
         self.frame_profile_menu.grid_columnconfigure((0, 1, 2, 3), weight=1)
         self.frame_profile_menu.grid_rowconfigure((0), weight=1)
-
 
         #Profile Buttons
         self.button_profile1 = ctk.CTkButton(self.frame_profile_menu, text="Profile 1", font=("Arial", 24), width=200, height=200)
@@ -206,7 +207,7 @@ class nutflixCreateProfile(ctk.CTkFrame):
         self.frame_start.grid_columnconfigure((0), weight=1) 
         self.frame_start.grid_rowconfigure((0, 1, 2, 3), weight=1)
 
-        ctk.CTkLabel(self.frame_start, text="Create Account", font=("Arial", 40)).grid(row=0, column=0, padx=10, pady=10)
+        ctk.CTkLabel(self.frame_start, text="Create Profile", font=("Arial", 40)).grid(row=0, column=0, padx=10, pady=10)
         
         self.profile_name = ctk.CTkEntry(self.frame_start, placeholder_text="Profile Name", height=50, width=300)
         self.profile_name.grid(row=1, column=0, pady=10)
@@ -223,7 +224,7 @@ class nutflixCreateProfile(ctk.CTkFrame):
 
         profile = [account_email, profile_name, profile_age_rating] # Email is a global value
 
-        with open("profile_information.csv", "r") as file: # Csv containing profile information
+        with open("profile_information.csv", "r") as file: # csv containing profile information
             reader = csv.reader(file)
             for row in reader:
                 if (row[0], row[1]) == (account_email, profile_name):
@@ -244,6 +245,13 @@ class nutflixBrowse(ctk.CTkFrame):
         self.build_ui(media_list)
     
     def build_ui(self, media_list):
+        # Recommended Movie/TV Show
+        self.banner_frame = ctk.CTkFrame(self, height=300)
+        self.banner_frame.pack(fill="both", expand=True)
+        
+        banner_image = "hello"
+        
+        # Grid of media
         self.scrollable_menu = ctk.CTkScrollableFrame(self)
         self.scrollable_menu.pack(fill="both", expand=True)
         
@@ -255,6 +263,34 @@ class nutflixBrowse(ctk.CTkFrame):
             row = index // 5 # 5 rows
             col = index % 5 # (5-1) columns
             self.media_widget(i).grid(row=row, column=col, padx=10, pady=20, sticky="ns")
+    
+    def choose_banner_media(self):
+        # choose random based on age rating and genres of most recently watched shows/movies
+        recently_watched = []
+        with open("profile_information.csv", "r") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                if "hello": # something
+                    recently_watched = [row[3], row[4], row[5], row[6]]
+                    max_age_rating = row[2]
+                    break
+        
+        # Filtering based on genres and age rating
+        matches = []
+        for title in recently_watched:
+            for i in media_list:
+                if i.name == title:
+                    if "hello": # if the movie is within the range of which the profile user can watch
+                        matches.append(i)
+        
+        # If no matches, pick any movie/TV show that's age appropriate
+        if len(matches) == 0:
+            matches = []
+            for i in media_list:
+                if "hello": # if the movie is within the range of which the profile user can watch
+                    matches.append(i)
+        
+        return random.choice(matches)
     
     def media_widget(self, media):
         name = media.get_name()
