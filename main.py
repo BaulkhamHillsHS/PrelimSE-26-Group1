@@ -253,7 +253,7 @@ class nutflixBrowse(ctk.CTkFrame):
             index = media_list.index(i)
             row = index // 5 # 5 rows
             col = index % 5 # (5-1) columns
-            self.media_widget(i).grid(row=row, column=col, padx=10, pady=20, sticky="nsew")
+            self.media_widget(i).grid(row=row, column=col, padx=10, pady=20, sticky="ns")
     
     def media_widget(self, media):
         name = media.get_name()
@@ -267,7 +267,7 @@ class nutflixBrowse(ctk.CTkFrame):
         label_thumbnail.pack(fill="both", expand=True)
 
         # Hover Preview
-        image = ctk.CTkImage(light_image=media.get_image(), dark_image=media.get_image(), size=(180, 116))
+        image = ctk.CTkImage(light_image=ImageEnhance.Brightness(media.get_image()).enhance(0.4), dark_image=ImageEnhance.Brightness(media.get_image()).enhance(0.4), size=(180, 116))
         
         def show_image(event):
             label_thumbnail.configure(image=image)
