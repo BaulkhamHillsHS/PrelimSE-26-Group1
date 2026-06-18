@@ -95,6 +95,19 @@ class nutflixApp(ctk.CTk):
         if parameter == "profile_count":
             return self.current_user_profile_count
     
+    def set_profile(self, profile_name, max_age_rating, recently_watched):
+        self.current_profile_name = profile_name
+        self.current_profile_age_rating = max_age_rating
+        self.current_profile_recently_watched = recently_watched
+    
+    def get_profile(self, parameter):
+        if parameter == "name":
+            return self.current_profile_name
+        if parameter == "age_rating":
+            return self.current_profile_age_rating
+        if parameter == "recently_watched":
+            return self.current_profile_recently_watched
+    
     def set_watching(self, watching): # Setter function for setting the show/movie the user is currently watching
         self.watching = watching
     
@@ -240,16 +253,20 @@ class nutflixBrowse(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
-
         global media_list
-        self.build_ui(media_list)
     
     def build_ui(self, media_list):
         # Recommended Movie/TV Show
         self.banner_frame = ctk.CTkFrame(self, height=300)
         self.banner_frame.pack(fill="both", expand=True)
         
-        banner_image = "hello"
+        banner_image = self.choose_banner_media()
+        banner = banner_image.get_image().resize((1080, 300))
+        banner_ctk = ctk.CTkImage(light_image=banner, dark_image=banner, size=(1080, 300))
+        
+        ctk.CTkLabel(self.banner_frame, image=banner_ctk, text="")
+        ctk.CTkLabel(self.banner_frame, text=banner_image.get_name(), font=(32, "bold"), text_color="white").place(x=30, y=220)
+        ctk.CTkButton(self.banner_frame, text="▶ Play", command=lambda: self.watch(media))
         
         # Grid of media
         self.scrollable_menu = ctk.CTkScrollableFrame(self)
@@ -265,29 +282,22 @@ class nutflixBrowse(ctk.CTkFrame):
             self.media_widget(i).grid(row=row, column=col, padx=10, pady=20, sticky="ns")
     
     def choose_banner_media(self):
-        # choose random based on age rating and genres of most recently watched shows/movies
-        recently_watched = []
-        with open("profile_information.csv", "r") as file:
-            reader = csv.reader(file)
-            for row in reader:
-                if "hello": # something
-                    recently_watched = [row[3], row[4], row[5], row[6]]
-                    max_age_rating = row[2]
-                    break
+        max_age_rating = self.controller.get_profile("age_rating")
+        recently_watched = self.controller.get_profile("recently_watched")
         
         # Filtering based on genres and age rating
         matches = []
         for title in recently_watched:
             for i in media_list:
                 if i.name == title:
-                    if "hello": # if the movie is within the range of which the profile user can watch
+                    if age_rating_order.index(i.age_rating) <= age_rating_order.index(max_age_rating): # if the movie is within the range of which the profile user can watch
                         matches.append(i)
         
         # If no matches, pick any movie/TV show that's age appropriate
         if len(matches) == 0:
             matches = []
             for i in media_list:
-                if "hello": # if the movie is within the range of which the profile user can watch
+                if age_rating_order.index(i.age_rating) <= age_rating_order.index(max_age_rating): # if the movie is within the range of which the profile user can watch
                     matches.append(i)
         
         return random.choice(matches)
@@ -326,7 +336,6 @@ class nutflixWatch(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
-        
         self.build_ui()
     
     def build_ui(self):
