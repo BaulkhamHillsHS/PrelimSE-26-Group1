@@ -119,7 +119,7 @@ class nutflixApp(ctk.CTk):
         self.frames = {}
         
         # Create frame instances and store them
-        for f in (nutflixSignIn, nutflixStart, nutflixCreateProfile, nutflixBrowse, nutflixWatch):
+        for f in (nutflixSignIn, nutflixStart, nutflixCreateProfile, nutflixSubscriptions, nutflixBrowse, nutflixWatch):
             frame = f(self.container, self)
             self.frames[f] = frame
             frame.grid(row=0, column=0, sticky="nsew")
@@ -270,15 +270,19 @@ class nutflixStart(ctk.CTkFrame):
         #Heading
         ctk.CTkLabel(self.frame_start, text="Who's Watching?", font=("Arial", 40)).grid(row=0, column=1, padx=10, pady=10)
 
-        #Menu
+        #Profile Select
         self.frame_profile_menu = ctk.CTkFrame(master=self.frame_start)
         self.frame_profile_menu.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
         self.frame_profile_menu.grid_columnconfigure((0, 1, 2, 3), weight=1)
         self.frame_profile_menu.grid_rowconfigure((0), weight=1)
 
-        #Edit Profiles Buttons
-        self.button_edit_profile = ctk.CTkButton(self.frame_start, text="Edit Profiles", font=("Arial", 16), width=200, height=50)
-        self.button_edit_profile.grid(row=2, column=1)
+        #Remove Profiles Buttons
+        self.button_edit_profile = ctk.CTkButton(self.frame_start, text="Remove Profiles", font=("Arial", 16), width=200, height=50)
+        self.button_edit_profile.grid(row=2, column=0)
+
+        #Manage Subcription Button
+        self.button_subscription = ctk.CTkButton(self.frame_start, text="Manage Subscription", font=("Arial", 16), width=200, height=50, command=lambda: self.controller.show_frame(nutflixSubscriptions))
+        self.button_subscription.grid(row=2, column=2)
 
     def build_profile_buttons(self): # Runs whenever the page loads through the controller
         #Profile Buttons
@@ -303,7 +307,6 @@ class nutflixStart(ctk.CTkFrame):
     def select_profile(self, name, age_rating, recently_watched):
         self.controller.show_frame(nutflixBrowse)
         self.controller.set_profile(name, age_rating, recently_watched)
-
 
 class nutflixCreateProfile(ctk.CTkFrame):
     def __init__(self, parent, controller):
@@ -347,6 +350,20 @@ class nutflixCreateProfile(ctk.CTkFrame):
         
         current_account.profile_added(profile_name, profile_age_rating) # Immediately updates the profile count of the current account by +1   
         self.controller.show_frame(nutflixStart) # Takes user back to the start page
+
+class nutflixSubscriptions(ctk.CTkFrame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
+        self.build_ui()
+    
+    def build_ui(self):
+        self.frame_start = ctk.CTkFrame(self)
+        self.frame_start.pack(fill="both", expand=True)
+        
+        self.frame_start.grid_columnconfigure((0), weight=1) 
+        self.frame_start.grid_rowconfigure((0, 1, 2, 3), weight=1)
+    
     
 class nutflixBrowse(ctk.CTkFrame):
     def __init__(self, parent, controller):
