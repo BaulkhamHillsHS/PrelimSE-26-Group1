@@ -117,7 +117,7 @@ class nutflixApp(ctk.CTk):
         """
         TESTTESTETSTETSTETST
         """
-        self.set_profile("Test", "R18+", [])
+        self.set_profile("Test", "R18+", ["comedy", "comedy", "comedy", "comedy"])
         self.show_frame(nutflixBrowse)
         """
         TESTTESTETSTETSTETST
@@ -359,6 +359,7 @@ class nutflixBrowse(ctk.CTkFrame):
         max_age_rating = self.controller.get_profile("age_rating")
         recently_watched = self.controller.get_profile("recently_watched")
         
+        # IMPORTANT IMPORTANT THE GENRE SELECTION DOES NOT WORK PROPERLY RIGHT NOW FIX SOON
         # Filtering based on genres and age rating
         matches = []
         for title in recently_watched:
