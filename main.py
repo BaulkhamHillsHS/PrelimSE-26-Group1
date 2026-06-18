@@ -170,7 +170,7 @@ class nutflixSignIn(ctk.CTkFrame):
         else:
             print("Sign in failed")
 
-    def validate_credentials(self, email, password):
+    def validate_credentials(self, username, password):
         with open("account_information.csv", "r") as file:
             reader = csv.reader(file)
             for row in reader:
