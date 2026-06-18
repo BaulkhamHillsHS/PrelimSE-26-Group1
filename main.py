@@ -364,6 +364,11 @@ class nutflixSubscriptions(ctk.CTkFrame):
         self.frame_start.grid_columnconfigure((0), weight=1) 
         self.frame_start.grid_rowconfigure((0, 1, 2, 3), weight=1)
     
+    def show_plans():
+        # Will be called on refresh, to update depending on a current plan selected
+        current_plan = current_account.get_user_information("plan")
+        ...
+    
     
 class nutflixBrowse(ctk.CTkFrame):
     def __init__(self, parent, controller):
