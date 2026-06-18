@@ -89,13 +89,20 @@ class account:
         current_account_profiles.append(new_profile)
 
 class profile(account):
-    def __init__(self, name, age_rating, username, password, email, plan, profiles):
+    def __init__(self, name, age_rating, recently_watched, username, password, email, plan, profiles):
         super().__init__(username, password, email, plan, profiles)
         self.name = name
         self.age_rating = age_rating
+        self.recently_watched = recently_watched
     
     def get_name(self):
         return self.name
+    
+    def get_age_rating(self):
+        return self.age_rating
+    
+    def get_recently_watched(self):
+        return self.recently_watched
 
 class nutflixApp(ctk.CTk):
     def __init__(self):
@@ -238,7 +245,7 @@ class nutflixSignIn(ctk.CTkFrame):
             reader = csv.reader(file)
             for row in reader:
                 if row[0] == email:
-                    current_profile = profile(row[1], row[2], username, password, email, plan, profiles)
+                    current_profile = profile(row[1], row[2], row[3], username, password, email, plan, profiles)
 
                     current_account_profiles.append(current_profile)
 
@@ -273,26 +280,29 @@ class nutflixStart(ctk.CTkFrame):
         self.button_edit_profile = ctk.CTkButton(self.frame_start, text="Edit Profiles", font=("Arial", 16), width=200, height=50)
         self.button_edit_profile.grid(row=2, column=1)
 
-    def build_profile_buttons(self):
+    def build_profile_buttons(self): # Runs whenever the page loads through the controller
         #Profile Buttons
         profile_amount = len(current_account_profiles)
 
-        for i in self.frame_profile_menu.winfo_children():
+        for i in self.frame_profile_menu.winfo_children(): # Destroys pre-existing widgets for clean execution
             i.destroy()
 
         for i, profile in enumerate(current_account_profiles):
+            # Variables of the profile
             name = profile.get_name()
-            print(name)
+            age_rating = profile.get_age_rating()
+            recently_watched = profile.get_recently_watched()
 
-            button_profile = ctk.CTkButton(self.frame_profile_menu, command=self.select_profile(name), text=name, font=("Arial", 24), width=200, height=200)
-            button_profile.grid(row=0, column=i)
+            button_profile = ctk.CTkButton(self.frame_profile_menu, command=lambda name=name, age=age_rating, recent=recently_watched: self.select_profile(name, age, recent), text=name, font=("Arial", 24), width=200, height=200)
+            button_profile.grid(row=0, column=i) # Column length is variable depending on the amount of profiles
 
         #Create Profile
         self.button_profile_create = ctk.CTkButton(self.frame_profile_menu, text="Create Profile", command=lambda: self.controller.show_frame(nutflixCreateProfile), font=("Arial", 24), width=200, height=200)
         self.button_profile_create.grid(row=0, column=profile_amount+1) # + 1 is for the 'Create Profile' button
     
-    def select_profile(self, name):
+    def select_profile(self, name, age_rating, recently_watched):
         self.controller.show_frame(nutflixBrowse)
+        self.controller.set_profile(name, age_rating, recently_watched)
 
 
 class nutflixCreateProfile(ctk.CTkFrame):
