@@ -215,15 +215,14 @@ class nutflixStart(ctk.CTkFrame):
         self.frame_profile_menu.grid_columnconfigure((0, 1, 2, 3), weight=1)
         self.frame_profile_menu.grid_rowconfigure((0), weight=1)
 
-
         #Profile Buttons
-        self.button_profile1 = ctk.CTkButton(self.frame_profile_menu, text="Profile 1", font=("Arial", 24), width=200, height=200)
+        self.button_profile1 = ctk.CTkButton(self.frame_profile_menu, command=lambda: self.controller.show_frame(nutflixBrowse), text="Profile 1", font=("Arial", 24), width=200, height=200)
         self.button_profile1.grid(row=0, column=0)
 
-        self.button_profile2 = ctk.CTkButton(self.frame_profile_menu, text="Profile 2", font=("Arial", 24), width=200, height=200)
+        self.button_profile2 = ctk.CTkButton(self.frame_profile_menu, command=lambda: self.controller.show_frame(nutflixBrowse), text="Profile 2", font=("Arial", 24), width=200, height=200)
         self.button_profile2.grid(row=0, column=1)
 
-        self.button_profile3 = ctk.CTkButton(self.frame_profile_menu, text="Profile 3", font=("Arial", 24), width=200, height=200)
+        self.button_profile3 = ctk.CTkButton(self.frame_profile_menu, command=lambda: self.controller.show_frame(nutflixBrowse), text="Profile 3", font=("Arial", 24), width=200, height=200)
         self.button_profile3.grid(row=0, column=2)
 
         self.button_profile_create = ctk.CTkButton(self.frame_profile_menu, text="Create Profile", command=lambda: self.controller.show_frame(nutflixCreateProfile), font=("Arial", 24), width=200, height=200)
