@@ -114,11 +114,21 @@ class nutflixApp(ctk.CTk):
             self.frames[f] = frame
             frame.grid(row=0, column=0, sticky="nsew")
         
+        """
+        TESTTESTETSTETSTETST
+        """
+        self.set_profile("Test", "R18+", [])
+        self.show_frame(nutflixBrowse)
+        """
+        TESTTESTETSTETSTETST
+        """
         # Show the sign in frame first
-        self.show_frame(nutflixSignIn)
+        """self.show_frame(nutflixSignIn)"""
     
     def show_frame(self, cont):
         frame = self.frames[cont]
+        if cont == nutflixBrowse:
+            frame.build_ui(media_list)
         frame.tkraise()
     
     def set_user_information(self, username, password, email, full_name, plan, profile_count): # Setter function to set the account information of the current uer
@@ -328,9 +338,9 @@ class nutflixBrowse(ctk.CTkFrame):
         banner = banner_image.get_image().resize((1080, 300))
         banner_ctk = ctk.CTkImage(light_image=banner, dark_image=banner, size=(1080, 300))
         
-        ctk.CTkLabel(self.banner_frame, image=banner_ctk, text="")
-        ctk.CTkLabel(self.banner_frame, text=banner_image.get_name(), font=(32, "bold"), text_color="white").place(x=30, y=220)
-        ctk.CTkButton(self.banner_frame, text="▶ Play", command=lambda: self.watch(media))
+        ctk.CTkLabel(self.banner_frame, image=banner_ctk, text="").pack(fill="both", expand=True)
+        ctk.CTkLabel(self.banner_frame, text=banner_image.get_name(), font=("Arial", 32, "bold"), text_color="white").place(x=30, y=220)
+        ctk.CTkButton(self.banner_frame, text="▶ Play", command=lambda: self.watch(banner_image)).place(x=30, y=260)
         
         # Grid of media
         self.scrollable_menu = ctk.CTkScrollableFrame(self)
