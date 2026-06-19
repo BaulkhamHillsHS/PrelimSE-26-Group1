@@ -2,6 +2,7 @@ import customtkinter as ctk
 from PIL import Image, ImageEnhance
 import csv
 import random
+import ast
 
 ctk.set_appearance_mode('dark')
 ctk.set_default_color_theme("theme_nutflix.JSON")
@@ -89,10 +90,24 @@ class account:
         current_account_profiles.append(new_profile)
 
 class profile(account):
-    def __init__(self, name, age_rating, username, password, email, plan, profiles):
+    def __init__(self, name, age_rating, recently_watched, watchlist, username, password, email, plan, profiles):
         super().__init__(username, password, email, plan, profiles)
         self.name = name
         self.age_rating = age_rating
+        self.recently_watched = recently_watched
+        self.watchlist = watchlist
+    
+    def get_name(self):
+        return self.name
+    
+    def get_age_rating(self):
+        return self.age_rating
+    
+    def get_recently_watched(self):
+        return self.recently_watched
+    
+    def get_watchlist(self):
+        return self.watchlist
 
 class nutflixApp(ctk.CTk):
     def __init__(self):
@@ -109,7 +124,7 @@ class nutflixApp(ctk.CTk):
         self.frames = {}
         
         # Create frame instances and store them
-        for f in (nutflixSignIn, nutflixStart, nutflixCreateProfile, nutflixBrowse, nutflixWatch):
+        for f in (nutflixSignIn, nutflixStart, nutflixCreateProfile, nutflixSubscriptions, nutflixBrowse, nutflixWatch):
             frame = f(self.container, self)
             self.frames[f] = frame
             frame.grid(row=0, column=0, sticky="nsew")
@@ -117,7 +132,7 @@ class nutflixApp(ctk.CTk):
         """
         TESTTESTETSTETSTETST
         """
-        self.set_profile("Test", "R18+", [])
+        #self.set_profile("Test", "R18+", [])
         self.show_frame(nutflixSignIn)
         """
         TESTTESTETSTETSTETST
@@ -129,13 +144,14 @@ class nutflixApp(ctk.CTk):
         frame = self.frames[cont]
         if cont == nutflixBrowse:
             frame.build_ui(media_list)
+        if cont == nutflixStart:
+            frame.build_profile_buttons()
         frame.tkraise()
     
-    def set_user_information(self, username, password, email, full_name, plan, profile_count): # Setter function to set the account information of the current uer
+    def set_user_information(self, username, password, email, plan, profile_count): # Setter function to set the account information of the current uer
         self.current_user_username = username
         self.current_user_password = password
         self.current_user_email = email
-        self.current_user_full_name = full_name
         self.current_user_plan = plan
         self.current_user_profile_count = profile_count
     
@@ -153,10 +169,11 @@ class nutflixApp(ctk.CTk):
         if parameter == "profile_count":
             return self.current_user_profile_count
     
-    def set_profile(self, profile_name, max_age_rating, recently_watched):
+    def set_profile(self, profile_name, max_age_rating, recently_watched, watchlist):
         self.current_profile_name = profile_name
         self.current_profile_age_rating = max_age_rating
         self.current_profile_recently_watched = recently_watched
+        self.current_profile_watchlist = watchlist
     
     def get_profile(self, parameter):
         if parameter == "name":
@@ -165,6 +182,11 @@ class nutflixApp(ctk.CTk):
             return self.current_profile_age_rating
         if parameter == "recently_watched":
             return self.current_profile_recently_watched
+        if parameter == "watchlist":
+            return self.current_profile_watchlist
+    
+    def update_watchlist(self, watchlist): # Used to update the profile watchlist information when a title is added to the watchlist
+        self.current_profile_watchlist = watchlist
     
     def set_watching(self, watching): # Setter function for setting the show/movie the user is currently watching
         self.watching = watching
@@ -226,14 +248,15 @@ class nutflixSignIn(ctk.CTkFrame):
                     return True
     
     def get_existing_profiles(self, username, password, email, plan, profiles):
+        global current_account_profiles # List of all profiles under the account
+        current_account_profiles = []
+        
         with open("profile_information.csv", "r") as file:
             reader = csv.reader(file)
             for row in reader:
                 if row[0] == email:
-                    current_profile = profile(row[1], row[2], username, password, email, plan, profiles)
+                    current_profile = profile(row[1], row[2], row[3], row[4], username, password, email, plan, profiles)
 
-                    global current_account_profiles # List of all profiles under the account
-                    current_account_profiles = []
                     current_account_profiles.append(current_profile)
 
                     print(current_account_profiles)
@@ -257,28 +280,44 @@ class nutflixStart(ctk.CTkFrame):
         #Heading
         ctk.CTkLabel(self.frame_start, text="Who's Watching?", font=("Arial", 40)).grid(row=0, column=1, padx=10, pady=10)
 
-        #Menu
+        #Profile Select
         self.frame_profile_menu = ctk.CTkFrame(master=self.frame_start)
         self.frame_profile_menu.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
         self.frame_profile_menu.grid_columnconfigure((0, 1, 2, 3), weight=1)
         self.frame_profile_menu.grid_rowconfigure((0), weight=1)
 
+        #Remove Profiles Buttons
+        self.button_edit_profile = ctk.CTkButton(self.frame_start, text="Remove Profiles", font=("Arial", 16), width=200, height=50)
+        self.button_edit_profile.grid(row=2, column=0)
+
+        #Manage Subcription Button
+        self.button_subscription = ctk.CTkButton(self.frame_start, text="Manage Subscription", font=("Arial", 16), width=200, height=50, command=lambda: self.controller.show_frame(nutflixSubscriptions))
+        self.button_subscription.grid(row=2, column=2)
+
+    def build_profile_buttons(self): # Runs whenever the page loads through the controller
         #Profile Buttons
-        self.button_profile1 = ctk.CTkButton(self.frame_profile_menu, command=lambda: self.controller.show_frame(nutflixBrowse), text="Profile 1", font=("Arial", 24), width=200, height=200)
-        self.button_profile1.grid(row=0, column=0)
+        profile_amount = len(current_account_profiles)
 
-        self.button_profile2 = ctk.CTkButton(self.frame_profile_menu, command=lambda: self.controller.show_frame(nutflixBrowse), text="Profile 2", font=("Arial", 24), width=200, height=200)
-        self.button_profile2.grid(row=0, column=1)
+        for i in self.frame_profile_menu.winfo_children(): # Destroys pre-existing widgets for clean execution
+            i.destroy()
 
-        self.button_profile3 = ctk.CTkButton(self.frame_profile_menu, command=lambda: self.controller.show_frame(nutflixBrowse), text="Profile 3", font=("Arial", 24), width=200, height=200)
-        self.button_profile3.grid(row=0, column=2)
+        for i, profile in enumerate(current_account_profiles):
+            # Variables of the profile
+            name = profile.get_name()
+            age_rating = profile.get_age_rating()
+            recently_watched = profile.get_recently_watched()
+            watchlist = profile.get_watchlist()
 
+            button_profile = ctk.CTkButton(self.frame_profile_menu, command=lambda name=name, age=age_rating, recent=recently_watched, watchlist=watchlist: self.select_profile(name, age, recent, watchlist), text=name, font=("Arial", 24), width=200, height=200)
+            button_profile.grid(row=0, column=i) # Column length is variable depending on the amount of profiles
+
+        #Create Profile
         self.button_profile_create = ctk.CTkButton(self.frame_profile_menu, text="Create Profile", command=lambda: self.controller.show_frame(nutflixCreateProfile), font=("Arial", 24), width=200, height=200)
-        self.button_profile_create.grid(row=0, column=3)
-
-        #Edit Profiles Buttons
-        self.button_edit_profile = ctk.CTkButton(self.frame_start, text="Edit Profiles", font=("Arial", 16), width=200, height=50)
-        self.button_edit_profile.grid(row=2, column=1)
+        self.button_profile_create.grid(row=0, column=profile_amount+1) # + 1 is for the 'Create Profile' button
+    
+    def select_profile(self, name, age_rating, recently_watched, watchlist):
+        self.controller.set_profile(name, age_rating, recently_watched, watchlist)
+        self.controller.show_frame(nutflixBrowse)
 
 class nutflixCreateProfile(ctk.CTkFrame):
     def __init__(self, parent, controller):
@@ -306,9 +345,10 @@ class nutflixCreateProfile(ctk.CTkFrame):
     def add_profile(self):
         profile_name = self.profile_name.get()
         profile_age_rating = self.age_rating.get()
+        watchlist = "[]"
         account_email = current_account.get_user_information("email")
 
-        profile = [account_email, profile_name, profile_age_rating] # Email is a global value
+        profile = [account_email, profile_name, profile_age_rating, watchlist] # Email is a global value
 
         with open("profile_information.csv", "r") as file: # csv containing profile information
             reader = csv.reader(file)
@@ -322,6 +362,25 @@ class nutflixCreateProfile(ctk.CTkFrame):
         
         current_account.profile_added(profile_name, profile_age_rating) # Immediately updates the profile count of the current account by +1   
         self.controller.show_frame(nutflixStart) # Takes user back to the start page
+
+class nutflixSubscriptions(ctk.CTkFrame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
+        self.build_ui()
+    
+    def build_ui(self):
+        self.frame_start = ctk.CTkFrame(self)
+        self.frame_start.pack(fill="both", expand=True)
+        
+        self.frame_start.grid_columnconfigure((0), weight=1) 
+        self.frame_start.grid_rowconfigure((0, 1, 2, 3), weight=1)
+    
+    def show_plans():
+        # Will be called on refresh, to update depending on a current plan selected
+        current_plan = current_account.get_user_information("plan")
+        ...
+    
     
 class nutflixBrowse(ctk.CTkFrame):
     def __init__(self, parent, controller):
@@ -390,7 +449,11 @@ class nutflixBrowse(ctk.CTkFrame):
 
         # Hover Preview
         image = ctk.CTkImage(light_image=ImageEnhance.Brightness(media.get_image()).enhance(0.4), dark_image=ImageEnhance.Brightness(media.get_image()).enhance(0.4), size=(180, 116))
-        
+
+        # Add to watchlist button
+        button_watchlist = ctk.CTkButton(label_thumbnail, text="+", height=20, width=20, command=lambda name=name: add_watchlist(media.get_name()))
+        button_watchlist.place(relx=0.95, rely=0.05, anchor="center")
+
         def show_image(event):
             label_thumbnail.configure(image=image)
         
@@ -401,6 +464,24 @@ class nutflixBrowse(ctk.CTkFrame):
         label_thumbnail.bind("<Leave>", hide_image)
         label_thumbnail.bind("<Button-1>", lambda e: self.watch(media))
 
+        def add_watchlist(name):
+            current_watchlist = self.controller.get_profile("watchlist")
+            
+            editable_watchlist = ast.literal_eval(current_watchlist) # Converts the string representation of the list into an actual list
+            editable_watchlist.append(name)
+
+            updated_rows = []
+            with open("profile_information.csv", "r", newline="") as file: # Reads the current data
+                reader = csv.reader(file)
+                for row in reader:
+                    if row[0] == current_account.get_user_information("email") and row[1] == self.controller.get_profile("name"): # Finds the row which matches with the current user and the specific profile
+                        row[4] = str(editable_watchlist)
+                        self.controller.update_watchlist(str(editable_watchlist))
+                    updated_rows.append(row) # Copies the current data into 'updated_rows', along with the updated row
+            
+            with open("profile_information.csv", "w", newline="") as file: # Rewrites the 'account_information.csv' using the updated rows
+                writer = csv.writer(file)
+                writer.writerows(updated_rows)
         return frame_thumbnail
 
     def watch(self, media):

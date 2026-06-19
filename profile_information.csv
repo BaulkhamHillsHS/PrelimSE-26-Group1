@@ -1,2 +1,3 @@
-email,profile_name,max_age_rating,recently_watched1,recently_watched2,recently_watched3,recently_watched4
-auausten@yahoo.com,joe,MA15+,comedy,comedy,comedy,comedy
+email,profile_name,max_age_rating,recently_watched,watchlist
+auausten@yahoo.com,joe,G,none,"['The Dark Knight', 'The Shawshank Redemption', 'Breaking Bad', 'The Last of Us', 'Game of Thrones', 'Inception']"
+auausten@yahoo.com,67,M,none,"['The Dark Knight', 'Parasite', 'Stranger Things', 'The Dark Knight', 'Breaking Bad', 'The Shawshank Redemption']"
