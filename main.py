@@ -143,7 +143,7 @@ class nutflixApp(ctk.CTk):
     def show_frame(self, cont):
         frame = self.frames[cont]
         if cont == nutflixBrowse:
-            frame.build_ui(media_list)
+            frame.build_ui(media_list, ast.literal_eval(self.current_profile_watchlist))
         if cont == nutflixStart:
             frame.build_profile_buttons()
         frame.tkraise()
@@ -388,7 +388,7 @@ class nutflixBrowse(ctk.CTkFrame):
         self.controller = controller
         global media_list
     
-    def build_ui(self, media_list):
+    def build_ui(self, media_list, watchlist):
         # Everything in this scrollable menu
         self.scrollable_menu = ctk.CTkScrollableFrame(self)
         self.scrollable_menu.pack(fill="both", expand=True)
@@ -404,7 +404,22 @@ class nutflixBrowse(ctk.CTkFrame):
         ctk.CTkLabel(self.banner_frame, image=banner_ctk, text="").pack(fill="both", expand=True)
         ctk.CTkLabel(self.banner_frame, text=banner_image.get_name(), font=("Arial", 40, "bold"), text_color="white").place(x=30, y=300)
         ctk.CTkButton(self.banner_frame, text="▶ Play", command=lambda: self.watch(banner_image)).place(x=30, y=380)
-        
+
+        # Watchlist horizontal scroller
+        self.scrollable_watchlist = ctk.CTkScrollableFrame(self.scrollable_menu, orientation="horizontal")
+        self.scrollable_watchlist.pack(fill="both", expand=True)
+
+        self.scrollable_watchlist.grid_columnconfigure((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), weight=1) 
+        self.scrollable_watchlist.grid_rowconfigure((0), weight=1)
+
+        for i in watchlist:
+            for v in media_list:
+                print(v)
+                if v.get_name() == i:
+                    print(i)
+                    self.media_widget(v, self.scrollable_watchlist).grid(row=0, column=watchlist.index(i), padx=10, pady=20, sticky="ns")
+
+        # Media browsing grid
         self.grid_frame = ctk.CTkFrame(self.scrollable_menu, fg_color="transparent")
         self.grid_frame.pack(fill="both", expand=True)
         
@@ -415,7 +430,7 @@ class nutflixBrowse(ctk.CTkFrame):
             index = media_list.index(i)
             row = index // 5 # 5 rows
             col = index % 5 # (5-1) columns
-            self.media_widget(i).grid(row=row, column=col, padx=10, pady=20, sticky="ns")
+            self.media_widget(i, self.grid_frame).grid(row=row, column=col, padx=10, pady=20, sticky="ns")
     
     def choose_banner_media(self):
         max_age_rating = self.controller.get_profile("age_rating")
@@ -439,12 +454,12 @@ class nutflixBrowse(ctk.CTkFrame):
         
         return random.choice(matches)
     
-    def media_widget(self, media):
+    def media_widget(self, media, frame):
         name = media.get_name()
         if len(name) > 20: # Ensures that the widget doesnt not stretch out or cut off text abruptly
             name = name[:20] + "..."
         
-        frame_thumbnail = ctk.CTkFrame(self.grid_frame, corner_radius=6, fg_color="#C0152A")
+        frame_thumbnail = ctk.CTkFrame(frame, corner_radius=6, fg_color="#C0152A")
         
         # Button of the widget
         label_thumbnail = ctk.CTkLabel(frame_thumbnail, text=name, height=126, width=192, corner_radius=6, bg_color="#C0152A")
