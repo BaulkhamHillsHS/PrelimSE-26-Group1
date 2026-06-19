@@ -185,7 +185,7 @@ class nutflixApp(ctk.CTk):
         if parameter == "watchlist":
             return self.current_profile_watchlist
     
-    def update_watchlist(self, watchlist):
+    def update_watchlist(self, watchlist): # Used to update the profile watchlist information when a title is added to the watchlist
         self.current_profile_watchlist = watchlist
     
     def set_watching(self, watching): # Setter function for setting the show/movie the user is currently watching
@@ -469,7 +469,6 @@ class nutflixBrowse(ctk.CTkFrame):
             
             editable_watchlist = ast.literal_eval(current_watchlist) # Converts the string representation of the list into an actual list
             editable_watchlist.append(name)
-            print(editable_watchlist)
 
             updated_rows = []
             with open("profile_information.csv", "r", newline="") as file: # Reads the current data
@@ -478,13 +477,11 @@ class nutflixBrowse(ctk.CTkFrame):
                     if row[0] == current_account.get_user_information("email") and row[1] == self.controller.get_profile("name"): # Finds the row which matches with the current user and the specific profile
                         row[4] = str(editable_watchlist)
                         self.controller.update_watchlist(str(editable_watchlist))
-
                     updated_rows.append(row) # Copies the current data into 'updated_rows', along with the updated row
             
             with open("profile_information.csv", "w", newline="") as file: # Rewrites the 'account_information.csv' using the updated rows
                 writer = csv.writer(file)
                 writer.writerows(updated_rows)
-
         return frame_thumbnail
 
     def watch(self, media):
