@@ -86,7 +86,7 @@ class account:
             writer = csv.writer(file)
             writer.writerows(updated_rows)
         
-        new_profile = profile(name, age_rating, self.current_user_username, self.current_user_password, self.current_user_email, self.current_user_plan, self.current_user_profiles)
+        new_profile = profile(name, age_rating, "[]", "[]", self.current_user_username, self.current_user_password, self.current_user_email, self.current_user_plan, self.current_user_profiles)
         current_account_profiles.append(new_profile)
 
 class profile(account):
@@ -345,10 +345,11 @@ class nutflixCreateProfile(ctk.CTkFrame):
     def add_profile(self):
         profile_name = self.profile_name.get()
         profile_age_rating = self.age_rating.get()
+        recently_watched = "[]"
         watchlist = "[]"
         account_email = current_account.get_user_information("email")
 
-        profile = [account_email, profile_name, profile_age_rating, watchlist] # Email is a global value
+        profile = [account_email, profile_name, profile_age_rating, recently_watched, watchlist] # Email is a global value
 
         with open("profile_information.csv", "r") as file: # csv containing profile information
             reader = csv.reader(file)
