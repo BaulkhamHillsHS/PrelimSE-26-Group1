@@ -389,24 +389,27 @@ class nutflixBrowse(ctk.CTkFrame):
         global media_list
     
     def build_ui(self, media_list):
-        # Recommended Movie/TV Show
-        self.banner_frame = ctk.CTkFrame(self, height=300)
-        self.banner_frame.pack(fill="both", expand=True)
-        
-        banner_image = self.choose_banner_media()
-        banner = banner_image.get_image().resize((1080, 300))
-        banner_ctk = ctk.CTkImage(light_image=banner, dark_image=banner, size=(1080, 300))
-        
-        ctk.CTkLabel(self.banner_frame, image=banner_ctk, text="").pack(fill="both", expand=True)
-        ctk.CTkLabel(self.banner_frame, text=banner_image.get_name(), font=("Arial", 32, "bold"), text_color="white").place(x=30, y=220)
-        ctk.CTkButton(self.banner_frame, text="▶ Play", command=lambda: self.watch(banner_image)).place(x=30, y=260)
-        
-        # Grid of media
+        # Everything in this scrollable menu
         self.scrollable_menu = ctk.CTkScrollableFrame(self)
         self.scrollable_menu.pack(fill="both", expand=True)
         
-        self.scrollable_menu.grid_columnconfigure((0, 1, 2, 3, 4), weight=1) 
-        self.scrollable_menu.grid_rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
+        # Recommended Movie/TV Show shows at the top of the scrollable menu
+        self.banner_frame = ctk.CTkFrame(self.scrollable_menu, height=600)
+        self.banner_frame.pack(fill="x", expand=False)
+        
+        banner_image = self.choose_banner_media()
+        banner = banner_image.get_image().resize((1080, 600))
+        banner_ctk = ctk.CTkImage(light_image=banner, dark_image=banner, size=(1080, 600))
+        
+        ctk.CTkLabel(self.banner_frame, image=banner_ctk, text="").pack(fill="both", expand=True)
+        ctk.CTkLabel(self.banner_frame, text=banner_image.get_name(), font=("Arial", 40, "bold"), text_color="white").place(x=30, y=300)
+        ctk.CTkButton(self.banner_frame, text="▶ Play", command=lambda: self.watch(banner_image)).place(x=30, y=380)
+        
+        self.grid_frame = ctk.CTkFrame(self.scrollable_menu, fg_color="transparent")
+        self.grid_frame.pack(fill="both", expand=True)
+        
+        self.grid_frame.grid_columnconfigure((0, 1, 2, 3, 4), weight=1) 
+        self.grid_frame.grid_rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
 
         for i in media_list: # Creates instance of media_widget in a grid layout
             index = media_list.index(i)
@@ -441,7 +444,7 @@ class nutflixBrowse(ctk.CTkFrame):
         if len(name) > 20: # Ensures that the widget doesnt not stretch out or cut off text abruptly
             name = name[:20] + "..."
         
-        frame_thumbnail = ctk.CTkFrame(self.scrollable_menu, corner_radius=6, fg_color="#C0152A")
+        frame_thumbnail = ctk.CTkFrame(self.grid_frame, corner_radius=6, fg_color="#C0152A")
         
         # Button of the widget
         label_thumbnail = ctk.CTkLabel(frame_thumbnail, text=name, height=126, width=192, corner_radius=6, bg_color="#C0152A")
