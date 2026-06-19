@@ -143,7 +143,8 @@ class nutflixApp(ctk.CTk):
     def show_frame(self, cont):
         frame = self.frames[cont]
         if cont == nutflixBrowse:
-            frame.build_ui(media_list, ast.literal_eval(self.current_profile_watchlist))
+            frame.build_ui(media_list)
+            self.update_watchlist(self.current_profile_watchlist)
         if cont == nutflixStart:
             frame.build_profile_buttons()
         frame.tkraise()
@@ -185,8 +186,12 @@ class nutflixApp(ctk.CTk):
         if parameter == "watchlist":
             return self.current_profile_watchlist
     
-    def update_watchlist(self, watchlist): # Used to update the profile watchlist information when a title is added to the watchlist
+    def update_watchlist(self, watchlist): # Used to update the profile watchlist ui when a title is added to the watchlist
+        for widget in self.frames[nutflixBrowse].scrollable_watchlist.winfo_children():
+            widget.destroy()
+
         self.current_profile_watchlist = watchlist
+        self.frames[nutflixBrowse].build_watchlist(ast.literal_eval(watchlist))
     
     def set_watching(self, watching): # Setter function for setting the show/movie the user is currently watching
         self.watching = watching
@@ -389,7 +394,7 @@ class nutflixBrowse(ctk.CTkFrame):
         self.controller = controller
         global media_list
     
-    def build_ui(self, media_list, watchlist):
+    def build_ui(self, media_list):
         # Everything in this scrollable menu
         self.scrollable_menu = ctk.CTkScrollableFrame(self)
         self.scrollable_menu.pack(fill="both", expand=True)
@@ -413,12 +418,7 @@ class nutflixBrowse(ctk.CTkFrame):
         self.scrollable_watchlist.pack(fill="x", expand=False, pady=(0, 50))
 
         self.scrollable_watchlist.grid_columnconfigure((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), weight=1) 
-        self.scrollable_watchlist.grid_rowconfigure((0), weight=0) 
-
-        for i in watchlist:
-            for v in media_list: # Matches the names found in watchlist with its corresponding media object in media_list
-                if v.get_name() == i:
-                    self.media_widget(v, self.scrollable_watchlist).grid(row=0, column=watchlist.index(i), padx=5, pady=5, sticky="w")
+        self.scrollable_watchlist.grid_rowconfigure((0), weight=0)
 
         # Media browsing grid
         ctk.CTkLabel(self.scrollable_menu, text="Browse", font=("Arial", 64), anchor="w", bg_color="#161616").pack(fill="both", expand=True, pady=20)
@@ -433,7 +433,7 @@ class nutflixBrowse(ctk.CTkFrame):
             index = media_list.index(i)
             row = index // 5 # 5 rows
             col = index % 5 # (5-1) columns
-            self.media_widget(i, self.grid_frame).grid(row=row, column=col, padx=10, pady=20)
+            self.media_widget(i, self.grid_frame, False).grid(row=row, column=col, padx=10, pady=20)
     
     def choose_banner_media(self):
         max_age_rating = self.controller.get_profile("age_rating")
@@ -457,7 +457,7 @@ class nutflixBrowse(ctk.CTkFrame):
         
         return random.choice(matches)
     
-    def media_widget(self, media, frame):
+    def media_widget(self, media, frame, isWatchlist):
         name = media.get_name()
         if len(name) > 20: # Ensures that the widget doesnt not stretch out or cut off text abruptly
             name = name[:20] + "..."
@@ -472,7 +472,11 @@ class nutflixBrowse(ctk.CTkFrame):
         image = ctk.CTkImage(light_image=ImageEnhance.Brightness(media.get_image()).enhance(0.4), dark_image=ImageEnhance.Brightness(media.get_image()).enhance(0.4), size=(180, 116))
 
         # Add to watchlist button
-        button_watchlist = ctk.CTkButton(label_thumbnail, text="+", height=20, width=20, command=lambda name=name: add_watchlist(media.get_name()))
+        if isWatchlist:
+            button_watchlist = ctk.CTkButton(label_thumbnail, text="-", height=20, width=20, command=lambda: remove_watchlist(media.get_name()))
+        else:
+            button_watchlist = ctk.CTkButton(label_thumbnail, text="+", height=20, width=20, command=lambda: add_watchlist(media.get_name()))
+        
         button_watchlist.place(relx=0.95, rely=0.05, anchor="center")
 
         def show_image(event):
@@ -497,13 +501,39 @@ class nutflixBrowse(ctk.CTkFrame):
                 for row in reader:
                     if row[0] == current_account.get_user_information("email") and row[1] == self.controller.get_profile("name"): # Finds the row which matches with the current user and the specific profile
                         row[4] = str(editable_watchlist)
-                        self.controller.update_watchlist(str(editable_watchlist))
                     updated_rows.append(row) # Copies the current data into 'updated_rows', along with the updated row
             
             with open("profile_information.csv", "w", newline="") as file: # Rewrites the 'account_information.csv' using the updated rows
                 writer = csv.writer(file)
                 writer.writerows(updated_rows)
+            self.controller.update_watchlist(str(editable_watchlist))
+
+        def remove_watchlist(name):
+            current_watchlist = self.controller.get_profile("watchlist")
+            
+            editable_watchlist = ast.literal_eval(current_watchlist) # Converts the string representation of the list into an actual list
+            editable_watchlist.remove(name)
+
+            updated_rows = []
+            with open("profile_information.csv", "r", newline="") as file: # Reads the current data
+                reader = csv.reader(file)
+                for row in reader:
+                    if row[0] == current_account.get_user_information("email") and row[1] == self.controller.get_profile("name"): # Finds the row which matches with the current user and the specific profile
+                        row[4] = str(editable_watchlist)
+                    updated_rows.append(row) # Copies the current data into 'updated_rows', along with the updated row
+            
+            with open("profile_information.csv", "w", newline="") as file: # Rewrites the 'account_information.csv' using the updated rows
+                writer = csv.writer(file)
+                writer.writerows(updated_rows)
+            self.controller.update_watchlist(str(editable_watchlist))
+        
         return frame_thumbnail
+    
+    def build_watchlist(self, watchlist):
+        for i in watchlist:
+            for v in media_list: # Matches the names found in watchlist with its corresponding media object in media_list
+                if v.get_name() == i:
+                    self.media_widget(v, self.scrollable_watchlist, True).grid(row=0, column=watchlist.index(i), padx=5, pady=5, sticky="w")
 
     def watch(self, media):
         self.controller.set_watching(media)
