@@ -406,20 +406,22 @@ class nutflixBrowse(ctk.CTkFrame):
         ctk.CTkButton(self.banner_frame, text="▶ Play", command=lambda: self.watch(banner_image)).place(x=30, y=380)
 
         # Watchlist horizontal scroller
-        ctk.CTkLabel(self.scrollable_menu, text="My Watchlist", font=("Arial", 40)).pack(fill="both", expand=True)
+        ctk.CTkLabel(self.scrollable_menu, text="My Watchlist", font=("Arial", 64), anchor="w").pack(fill="both", expand=False)
 
-        self.scrollable_watchlist = ctk.CTkScrollableFrame(self.scrollable_menu, orientation="horizontal")
-        self.scrollable_watchlist.pack(fill="both", expand=True)
+        self.scrollable_watchlist = ctk.CTkScrollableFrame(self.scrollable_menu, orientation="horizontal", height=148)
+        self.scrollable_watchlist.pack(fill="x", expand=False, pady=0)
 
         self.scrollable_watchlist.grid_columnconfigure((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), weight=1) 
-        self.scrollable_watchlist.grid_rowconfigure((0), weight=1)
+        self.scrollable_watchlist.grid_rowconfigure((0), weight=0) 
 
         for i in watchlist:
             for v in media_list: # Matches the names found in watchlist with its corresponding media object in media_list
                 if v.get_name() == i:
-                    self.media_widget(v, self.scrollable_watchlist).grid(row=0, column=watchlist.index(i), padx=5, pady=20, sticky="s")
+                    self.media_widget(v, self.scrollable_watchlist).grid(row=0, column=watchlist.index(i), padx=5, pady=5, sticky="w")
 
         # Media browsing grid
+        ctk.CTkLabel(self.scrollable_menu, text="Browse", font=("Arial", 64), anchor="w").pack(fill="both", expand=False)
+
         self.grid_frame = ctk.CTkFrame(self.scrollable_menu, fg_color="transparent")
         self.grid_frame.pack(fill="both", expand=True)
         
@@ -430,7 +432,7 @@ class nutflixBrowse(ctk.CTkFrame):
             index = media_list.index(i)
             row = index // 5 # 5 rows
             col = index % 5 # (5-1) columns
-            self.media_widget(i, self.grid_frame).grid(row=row, column=col, padx=10, pady=20, sticky="ns")
+            self.media_widget(i, self.grid_frame).grid(row=row, column=col, padx=10, pady=20)
     
     def choose_banner_media(self):
         max_age_rating = self.controller.get_profile("age_rating")
