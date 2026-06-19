@@ -187,7 +187,7 @@ class nutflixApp(ctk.CTk):
             return self.current_profile_watchlist
     
     def update_watchlist(self, watchlist): # Used to update the profile watchlist ui when a title is added to the watchlist
-        for widget in self.frames[nutflixBrowse].scrollable_watchlist.winfo_children():
+        for widget in self.frames[nutflixBrowse].scrollable_watchlist.winfo_children(): # Destroy exisitng widgets first
             widget.destroy()
 
         self.current_profile_watchlist = watchlist
@@ -473,9 +473,9 @@ class nutflixBrowse(ctk.CTkFrame):
 
         # Add to watchlist button
         if isWatchlist:
-            button_watchlist = ctk.CTkButton(label_thumbnail, text="-", height=20, width=20, command=lambda: remove_watchlist(media.get_name()))
+            button_watchlist = ctk.CTkButton(label_thumbnail, text="-", height=20, width=20, command=lambda: remove_watchlist(media.get_name())) # For destroying widget
         else:
-            button_watchlist = ctk.CTkButton(label_thumbnail, text="+", height=20, width=20, command=lambda: add_watchlist(media.get_name()))
+            button_watchlist = ctk.CTkButton(label_thumbnail, text="+", height=20, width=20, command=lambda: add_watchlist(media.get_name())) # For adding widget
         
         button_watchlist.place(relx=0.95, rely=0.05, anchor="center")
 
@@ -491,6 +491,9 @@ class nutflixBrowse(ctk.CTkFrame):
 
         def add_watchlist(name):
             current_watchlist = self.controller.get_profile("watchlist")
+            if name in current_watchlist:
+                print("Title already in watchlist.")
+                return
             
             editable_watchlist = ast.literal_eval(current_watchlist) # Converts the string representation of the list into an actual list
             editable_watchlist.append(name)
