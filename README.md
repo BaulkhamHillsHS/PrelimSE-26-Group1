@@ -1,11 +1,5 @@
- ____  _____  _____  _____  _________  ________  _____     _____  ____  ____  
-|_   \|_   _||_   _||_   _||  _   _  ||_   __  ||_   _|   |_   _||_  _||_  _| 
-  |   \ | |    | |    | |  |_/ | | \_|  | |_ \_|  | |       | |    \ \  / /   
-  | |\ \| |    | '    ' |      | |      |  _|     | |   _   | |     > `' <    
- _| |_\   |_    \ \__/ /      _| |_    _| |_     _| |__/ | _| |_  _/ /'`\ \_  
-|_____|\____|    `.__.'      |_____|  |_____|   |________||_____||____||____| 
-                                                                              
-                                                                              
+<img width="1274" height="284" alt="ascii-art-text" src="https://github.com/user-attachments/assets/bdbc9405-0388-4b5c-b1e8-31ad7a02a60c" />
+                                                                          
 Hey there!
 
 Thanks for being interested in using NUTFLIX, our new streaming service.
