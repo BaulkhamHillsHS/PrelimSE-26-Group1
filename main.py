@@ -395,7 +395,7 @@ class nutflixBrowse(ctk.CTkFrame):
         
         # Recommended Movie/TV Show shows at the top of the scrollable menu
         self.banner_frame = ctk.CTkFrame(self.scrollable_menu, height=600)
-        self.banner_frame.pack(fill="x", expand=False)
+        self.banner_frame.pack(fill="x", expand=False, pady=(0, 50))
         
         banner_image = self.choose_banner_media()
         banner = banner_image.get_image().resize((1080, 600))
@@ -406,10 +406,10 @@ class nutflixBrowse(ctk.CTkFrame):
         ctk.CTkButton(self.banner_frame, text="▶ Play", command=lambda: self.watch(banner_image)).place(x=30, y=380)
 
         # Watchlist horizontal scroller
-        ctk.CTkLabel(self.scrollable_menu, text="My Watchlist", font=("Arial", 64), anchor="w").pack(fill="both", expand=False)
+        ctk.CTkLabel(self.scrollable_menu, text="My Watchlist", font=("Arial", 64), anchor="w", bg_color="#161616").pack(fill="both", expand=True, pady=20)
 
         self.scrollable_watchlist = ctk.CTkScrollableFrame(self.scrollable_menu, orientation="horizontal", height=148)
-        self.scrollable_watchlist.pack(fill="x", expand=False, pady=0)
+        self.scrollable_watchlist.pack(fill="x", expand=False, pady=(0, 50))
 
         self.scrollable_watchlist.grid_columnconfigure((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), weight=1) 
         self.scrollable_watchlist.grid_rowconfigure((0), weight=0) 
@@ -420,7 +420,7 @@ class nutflixBrowse(ctk.CTkFrame):
                     self.media_widget(v, self.scrollable_watchlist).grid(row=0, column=watchlist.index(i), padx=5, pady=5, sticky="w")
 
         # Media browsing grid
-        ctk.CTkLabel(self.scrollable_menu, text="Browse", font=("Arial", 64), anchor="w").pack(fill="both", expand=False)
+        ctk.CTkLabel(self.scrollable_menu, text="Browse", font=("Arial", 64), anchor="w", bg_color="#161616").pack(fill="both", expand=True, pady=20)
 
         self.grid_frame = ctk.CTkFrame(self.scrollable_menu, fg_color="transparent")
         self.grid_frame.pack(fill="both", expand=True)
