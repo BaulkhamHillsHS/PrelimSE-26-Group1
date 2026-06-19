@@ -406,6 +406,8 @@ class nutflixBrowse(ctk.CTkFrame):
         ctk.CTkButton(self.banner_frame, text="▶ Play", command=lambda: self.watch(banner_image)).place(x=30, y=380)
 
         # Watchlist horizontal scroller
+        ctk.CTkLabel(self.scrollable_menu, text="My Watchlist", font=("Arial", 40)).pack(fill="both", expand=True)
+
         self.scrollable_watchlist = ctk.CTkScrollableFrame(self.scrollable_menu, orientation="horizontal")
         self.scrollable_watchlist.pack(fill="both", expand=True)
 
@@ -413,11 +415,9 @@ class nutflixBrowse(ctk.CTkFrame):
         self.scrollable_watchlist.grid_rowconfigure((0), weight=1)
 
         for i in watchlist:
-            for v in media_list:
-                print(v)
+            for v in media_list: # Matches the names found in watchlist with its corresponding media object in media_list
                 if v.get_name() == i:
-                    print(i)
-                    self.media_widget(v, self.scrollable_watchlist).grid(row=0, column=watchlist.index(i), padx=10, pady=20, sticky="ns")
+                    self.media_widget(v, self.scrollable_watchlist).grid(row=0, column=watchlist.index(i), padx=5, pady=20, sticky="s")
 
         # Media browsing grid
         self.grid_frame = ctk.CTkFrame(self.scrollable_menu, fg_color="transparent")
