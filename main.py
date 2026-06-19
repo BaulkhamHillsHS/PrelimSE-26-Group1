@@ -437,7 +437,11 @@ class nutflixBrowse(ctk.CTkFrame):
 
         # Hover Preview
         image = ctk.CTkImage(light_image=ImageEnhance.Brightness(media.get_image()).enhance(0.4), dark_image=ImageEnhance.Brightness(media.get_image()).enhance(0.4), size=(180, 116))
-        
+
+        # Add to watchlist button
+        button_watchlist = ctk.CTkButton(label_thumbnail, text="+", height=20, width=20, command=lambda name=name: add_watchlist(media.get_name()))
+        button_watchlist.place(relx=0.95, rely=0.05, anchor="center")
+
         def show_image(event):
             label_thumbnail.configure(image=image)
         
@@ -447,6 +451,9 @@ class nutflixBrowse(ctk.CTkFrame):
         label_thumbnail.bind("<Enter>", show_image)
         label_thumbnail.bind("<Leave>", hide_image)
         label_thumbnail.bind("<Button-1>", lambda e: self.watch(media))
+
+        def add_watchlist(name):
+            print(name)
 
         return frame_thumbnail
 
