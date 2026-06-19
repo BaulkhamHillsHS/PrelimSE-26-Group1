@@ -117,7 +117,7 @@ class nutflixApp(ctk.CTk):
         """
         TESTTESTETSTETSTETST
         """
-        self.set_profile("Test", "R18+", ["comedy", "comedy", "comedy", "comedy"])
+        self.set_profile("Test", "R18+", [])
         self.show_frame(nutflixBrowse)
         """
         TESTTESTETSTETSTETST
