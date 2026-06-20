@@ -704,7 +704,31 @@ class nutflixBrowse(ctk.CTkFrame):
 
     def watch(self, media):
         self.controller.set_watching(media)
+        self.add_recently_watched(media.get_name())
         self.controller.show_frame(nutflixWatch) # Todo: Create a new function in NutflixApp for specifically handling nutflixWatch()
+
+    def add_recently_watched(self, name):
+        current_recently_watched = self.controller.get_profile("recently_watched")
+        editable_recently_watched = ast.literal_eval(current_recently_watched)
+
+        if name in editable_recently_watched:
+            editable_recently_watched.remove(name)
+            
+        editable_recently_watched.append(name)
+
+        updated_rows = []
+        with open("profile_information.csv", "r", newline="") as file: # Reads the current data
+            reader = csv.reader(file)
+            for row in reader:
+                if row[0] == current_account.get_user_information("email") and row[1] == self.controller.get_profile("name"): # Finds the row which matches with the current user and the specific profile
+                    row[3] = str(editable_recently_watched)
+                updated_rows.append(row) # Copies the current data into 'updated_rows', along with the updated row
+            
+        with open("profile_information.csv", "w", newline="") as file: # Rewrites the 'account_information.csv' using the updated rows
+            writer = csv.writer(file)
+            writer.writerows(updated_rows)
+        
+        self.controller.current_profile_recently_watched = str(editable_recently_watched)
 
     def create_viewing_report(self):
         watch_history = self.controller.get_profile("recently_watched")
