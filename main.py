@@ -130,6 +130,8 @@ class nutflixApp(ctk.CTk):
             frame.build_profile_buttons()
         if cont == nutflixSubscriptions:
             frame.show_plans()
+        if cont == nutflixWatch:
+            frame.build_ui()
         frame.tkraise()
     
     def set_user_information(self, username, password, email, plan): # Setter function to set the account information of the current uer
@@ -525,6 +527,9 @@ class nutflixBrowse(ctk.CTkFrame):
         self.controller.update_watchlist(str(editable_watchlist))
     
     def build_ui(self, media_list):
+        for widget in self.winfo_children():
+            widget.destroy()
+        
         # Everything in this scrollable menu
         self.scrollable_menu = ctk.CTkScrollableFrame(self)
         self.scrollable_menu.pack(fill="both", expand=True)
@@ -708,14 +713,27 @@ class nutflixWatch(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
-        self.build_ui()
     
     def build_ui(self):
+        for widget in self.winfo_children():
+            widget.destroy()
+        
+        media = self.controller.get_watching()
+        
         self.frame_start = ctk.CTkFrame(self)
         self.frame_start.pack(fill="both", expand=True)
         
-        self.frame_start.grid_columnconfigure((0), weight=1) 
-        self.frame_start.grid_rowconfigure((0, 1, 2, 3), weight=1)
+        self.frame_start.grid_columnconfigure(0, weight=1) 
+        self.frame_start.grid_rowconfigure(0, weight=1)
+        
+        player_image = media.get_image().resize((1080, 720))
+        player_ctk = ctk.CTkImage(light_image=player_image, dark_image=player_image, size=(1080, 720))
+        
+        self.label_player = ctk.CTkLabel(self.frame_start, image=player_ctk, text="")
+        self.label_player.grid(row=0, column=0, sticky="nsew")
+        
+        ctk.CTkButton(self.frame_start, text="←  Back", font=("Arial", 14), fg_color="#1a1a1a", command=lambda: self.controller.show_frame(nutflixBrowse)).place(x=30, y=30)
+
 
 if __name__ == "__main__":
     app = nutflixApp()
