@@ -129,16 +129,7 @@ class nutflixApp(ctk.CTk):
             self.frames[f] = frame
             frame.grid(row=0, column=0, sticky="nsew")
         
-        """
-        TESTTESTETSTETSTETST
-        """
-        #self.set_profile("Test", "R18+", [])
         self.show_frame(nutflixSignIn)
-        """
-        TESTTESTETSTETSTETST
-        """
-        # Show the sign in frame first
-        """self.show_frame(nutflixSignIn)"""
     
     def show_frame(self, cont):
         frame = self.frames[cont]
@@ -273,34 +264,38 @@ class nutflixStart(ctk.CTkFrame):
         self.build_ui()
     
     def build_ui(self):
-        self.frame_start = ctk.CTkFrame(self)
+        self.frame_start = ctk.CTkFrame(self, fg_color="transparent")
         self.frame_start.pack(fill="both", expand=True)
 
-        self.frame_start.grid_columnconfigure((0, 1, 2), weight=1) 
-        self.frame_start.grid_rowconfigure((0, 1, 2), weight=1)
-
-        #Logo
-        ctk.CTkImage(light_image=logo_white, dark_image=logo_red, size=(30, 30))
+        self.frame_start.grid_columnconfigure(0, weight=1) 
+        self.frame_start.grid_rowconfigure(0, weight=1) # top spacing
+        self.frame_start.grid_rowconfigure(1, weight=0) # heading
+        self.frame_start.grid_rowconfigure(2, weight=0) # profiles
+        self.frame_start.grid_rowconfigure(3, weight=1) # bottom spacing
+        self.frame_start.grid_rowconfigure(4, weight=0) # bottom buttons
         
-        #Heading
-        ctk.CTkLabel(self.frame_start, text="Who's Watching?", font=("Arial", 40)).grid(row=0, column=1, padx=10, pady=10)
+        # Heading
+        ctk.CTkLabel(self.frame_start, text="Who's Watching?", font=("Arial", 42, "bold")).grid(row=1, column=0, pady=(0, 50))
 
-        #Profile Select
-        self.frame_profile_menu = ctk.CTkFrame(master=self.frame_start)
-        self.frame_profile_menu.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
-        self.frame_profile_menu.grid_columnconfigure((0, 1, 2, 3), weight=1)
-        self.frame_profile_menu.grid_rowconfigure((0), weight=1)
+        # Profile Select
+        self.frame_profile_menu = ctk.CTkFrame(self.frame_start, fg_color="transparent")
+        self.frame_profile_menu.grid(row=2, column=0)
 
-        #Remove Profiles Buttons
-        self.button_edit_profile = ctk.CTkButton(self.frame_start, text="Remove Profiles", font=("Arial", 16), width=200, height=50)
-        self.button_edit_profile.grid(row=2, column=0)
+        # Bottom Buttons
+        self.frame_bottom = ctk.CTkFrame(self.frame_start, fg_color="transparent")
+        self.frame_bottom.grid(row=4, column=0, sticky="ew", padx=40, pady=30)
+        self.frame_bottom.grid_columnconfigure(0, weight=1)
+        self.frame_bottom.grid_columnconfigure(1, weight=1)
 
-        #Manage Subcription Button
-        self.button_subscription = ctk.CTkButton(self.frame_start, text="Manage Subscription", font=("Arial", 16), width=200, height=50, command=lambda: self.controller.show_frame(nutflixSubscriptions))
-        self.button_subscription.grid(row=2, column=2)
+        self.button_edit_profile = ctk.CTkButton(self.frame_bottom, text="Remove Profiles", font=("Arial", 14), width=160, height=40)
+        self.button_edit_profile.grid(row=0, column=0, sticky="w")
+        self.button_subscription = ctk.CTkButton(self.frame_bottom, text="Manage Subscription", font=("Arial", 14), width=160, height=40, command=lambda: self.controller.show_frame(nutflixSubscriptions))
+        self.button_subscription.grid(row=0, column=1, sticky="e")
 
     def build_profile_buttons(self): # Runs whenever the page loads through the controller
         #Profile Buttons
+        tile = 160
+        
         profile_amount = len(current_account_profiles)
 
         for i in self.frame_profile_menu.winfo_children(): # Destroys pre-existing widgets for clean execution
@@ -313,12 +308,22 @@ class nutflixStart(ctk.CTkFrame):
             recently_watched = profile.get_recently_watched()
             watchlist = profile.get_watchlist()
 
-            button_profile = ctk.CTkButton(self.frame_profile_menu, command=lambda name=name, age=age_rating, recent=recently_watched, watchlist=watchlist: self.select_profile(name, age, recent, watchlist), text=name, font=("Arial", 24), width=200, height=200)
-            button_profile.grid(row=0, column=i) # Column length is variable depending on the amount of profiles
+            profile_tile = ctk.CTkFrame(self.frame_profile_menu, fg_color="transparent")
+            profile_tile.grid(row=0, column=i, padx=18)
+
+            button_profile = ctk.CTkButton(profile_tile, command=lambda name=name, age=age_rating, recent=recently_watched, watchlist=watchlist: self.select_profile(name, age, recent, watchlist), text="", corner_radius=10, width=tile, height=tile)
+            button_profile.pack()
+
+            ctk.CTkLabel(profile_tile, text=name, font=("Arial", 16), text_color="#cccccc").pack(pady=(10, 0))
 
         #Create Profile
-        self.button_profile_create = ctk.CTkButton(self.frame_profile_menu, text="Create Profile", command=lambda: self.controller.show_frame(nutflixCreateProfile), font=("Arial", 24), width=200, height=200)
-        self.button_profile_create.grid(row=0, column=profile_amount+1) # + 1 is for the 'Create Profile' button
+        create_tile = ctk.CTkFrame(self.frame_profile_menu, fg_color="transparent")
+        create_tile.grid(row=0, column=profile_amount, padx=18)
+
+        self.button_profile_create = ctk.CTkButton(create_tile, text="+", command=lambda: self.controller.show_frame(nutflixCreateProfile), font=("Arial", 48), corner_radius=10, width=tile, height=tile, fg_color="#1a1a1a", hover_color="#2a2a2a", border_width=2, border_color="#555555", text_color="#888888")
+        self.button_profile_create.pack()
+
+        ctk.CTkLabel(create_tile, text="Add Profile", font=("Arial", 16), text_color="#888888").pack(pady=(10, 0))
     
     def select_profile(self, name, age_rating, recently_watched, watchlist):
         self.controller.set_profile(name, age_rating, recently_watched, watchlist)
