@@ -300,18 +300,7 @@ class nutflixStart(ctk.CTkFrame):
             button_delete.grid(row=1, column=i, pady=0)
 
         #Create Profile
-        plan = current_account.get_user_information("plan")
-        limit = plan_profile_limits.get(plan)
-        
-        if profile_amount < limit: # If the profile amount has not reached the limit, the create profile button will show up
-            create_tile = ctk.CTkFrame(self.frame_profile_menu, fg_color="transparent")
-            create_tile.grid(row=0, column=profile_amount, padx=18)
-
-            self.button_profile_create = ctk.CTkButton(create_tile, text="+", command=lambda: self.controller.show_frame(nutflixCreateProfile), font=("Arial", 48), corner_radius=10, width=tile, height=tile, fg_color="#1a1a1a", hover_color="#2a2a2a", border_width=2, border_color="#555555", text_color="#888888")
-            self.button_profile_create.pack()
-
-            ctk.CTkLabel(create_tile, text="Add Profile", font=("Arial", 16), text_color="#888888").pack(pady=(10, 0))
-        if profile_amount < 5:
+        if profile_amount < 4: # If the profile amount has not reached the limit, the create profile button will show up
             create_tile = ctk.CTkFrame(self.frame_profile_menu, fg_color="transparent")
             create_tile.grid(row=0, column=profile_amount, padx=18)
 
@@ -393,7 +382,6 @@ plan_details = {
     "Peanut": {
         "price": "$7.99/mo",
         "perks": [
-            "2 profiles",
             "SD, 720p",
             "Watch on 1 device at a time",
             "Download on 1 device",
@@ -402,7 +390,6 @@ plan_details = {
     "Kingnut": {
         "price": "$14.99/mo",
         "perks": [
-            "4 profiles",
             "Ultra HD 4K + HDR",
             "Watch on 4 devices at a time",
             "Download on 4 devices",
