@@ -133,16 +133,7 @@ class nutflixApp(ctk.CTk):
             self.frames[f] = frame
             frame.grid(row=0, column=0, sticky="nsew")
         
-        """
-        TESTTESTETSTETSTETST
-        """
-        #self.set_profile("Test", "R18+", [])
         self.show_frame(nutflixSignIn)
-        """
-        TESTTESTETSTETSTETST
-        """
-        # Show the sign in frame first
-        """self.show_frame(nutflixSignIn)"""
     
     def show_frame(self, cont):
         frame = self.frames[cont]
@@ -220,13 +211,13 @@ class nutflixSignIn(ctk.CTkFrame):
         self.frame_form.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
 
         # Logo
-        logo = ctk.CTkImage(light_image=logo_white, dark_image=logo_red, size=(30, 30))
+        ctk.CTkImage(light_image=logo_white, dark_image=logo_red, size=(30, 30))
 
         # Heading
         ctk.CTkLabel(self.frame_form, text="Sign In", font=("Arial", 40)).grid(row=0, column=0, padx=10, pady=10)
 
         # Text Input
-        self.entry_username = ctk.CTkEntry(self.frame_form, placeholder_text="Email", height=50, width=300)
+        self.entry_username = ctk.CTkEntry(self.frame_form, placeholder_text="Username", height=50, width=300)
         self.entry_username.grid(row=1, column=0, sticky="n")
         self.entry_password = ctk.CTkEntry(self.frame_form, placeholder_text="Password", height=50, width=300)
         self.entry_password.grid(row=2, column=0, sticky="n")
@@ -277,17 +268,18 @@ class nutflixStart(ctk.CTkFrame):
         self.build_ui()
     
     def build_ui(self):
-        self.frame_start = ctk.CTkFrame(self)
+        self.frame_start = ctk.CTkFrame(self, fg_color="transparent")
         self.frame_start.pack(fill="both", expand=True)
 
-        self.frame_start.grid_columnconfigure((0, 1, 2), weight=1) 
-        self.frame_start.grid_rowconfigure((0, 1, 2), weight=1)
-
-        #Logo
-        logo = ctk.CTkImage(light_image=logo_white, dark_image=logo_red, size=(30, 30))
+        self.frame_start.grid_columnconfigure(0, weight=1) 
+        self.frame_start.grid_rowconfigure(0, weight=1) # top spacing
+        self.frame_start.grid_rowconfigure(1, weight=0) # heading
+        self.frame_start.grid_rowconfigure(2, weight=0) # profiles
+        self.frame_start.grid_rowconfigure(3, weight=1) # bottom spacing
+        self.frame_start.grid_rowconfigure(4, weight=0) # bottom buttons
         
-        #Heading
-        ctk.CTkLabel(self.frame_start, text="Who's Watching?", font=("Arial", 40)).grid(row=0, column=1, padx=10, pady=10)
+        # Heading
+        ctk.CTkLabel(self.frame_start, text="Who's Watching?", font=("Arial", 42, "bold")).grid(row=1, column=0, pady=(0, 50))
 
         #Profile Select
         self.frame_profile_menu = ctk.CTkFrame(master=self.frame_start)
@@ -298,9 +290,25 @@ class nutflixStart(ctk.CTkFrame):
         #Manage Subcription Button
         self.button_subscription = ctk.CTkButton(self.frame_start, text="Manage Subscription", font=("Arial", 16), width=200, height=50, command=lambda: self.controller.show_frame(nutflixSubscriptions))
         self.button_subscription.grid(row=2, column=1)
+        # Profile Select
+        self.frame_profile_menu = ctk.CTkFrame(self.frame_start, fg_color="transparent")
+        self.frame_profile_menu.grid(row=2, column=0)
+
+        # Bottom Buttons
+        self.frame_bottom = ctk.CTkFrame(self.frame_start, fg_color="transparent")
+        self.frame_bottom.grid(row=4, column=0, sticky="ew", padx=40, pady=30)
+        self.frame_bottom.grid_columnconfigure(0, weight=1)
+        self.frame_bottom.grid_columnconfigure(1, weight=1)
+
+        self.button_edit_profile = ctk.CTkButton(self.frame_bottom, text="Remove Profiles", font=("Arial", 14), width=160, height=40)
+        self.button_edit_profile.grid(row=0, column=0, sticky="w")
+        self.button_subscription = ctk.CTkButton(self.frame_bottom, text="Manage Subscription", font=("Arial", 14), width=160, height=40, command=lambda: self.controller.show_frame(nutflixSubscriptions))
+        self.button_subscription.grid(row=0, column=1, sticky="e")
 
     def build_profile_buttons(self): # Runs whenever the page loads through the controller
         #Profile Buttons
+        tile = 160
+        
         profile_amount = len(current_account_profiles)
 
         for i in self.frame_profile_menu.winfo_children(): # Destroys pre-existing widgets for clean execution
@@ -323,6 +331,22 @@ class nutflixStart(ctk.CTkFrame):
         if profile_amount < 5:
             button_profile_create = ctk.CTkButton(self.frame_profile_menu, text="Create Profile", command=lambda: self.controller.show_frame(nutflixCreateProfile), font=("Arial", 24), width=150, height=150)
             button_profile_create.grid(row=0, column=profile_amount+1, padx=20) # + 1 is for the 'Create Profile' button
+            profile_tile = ctk.CTkFrame(self.frame_profile_menu, fg_color="transparent")
+            profile_tile.grid(row=0, column=i, padx=18)
+
+            button_profile = ctk.CTkButton(profile_tile, command=lambda name=name, age=age_rating, recent=recently_watched, watchlist=watchlist: self.select_profile(name, age, recent, watchlist), text="", corner_radius=10, width=tile, height=tile)
+            button_profile.pack()
+
+            ctk.CTkLabel(profile_tile, text=name, font=("Arial", 16), text_color="#cccccc").pack(pady=(10, 0))
+
+        #Create Profile
+        create_tile = ctk.CTkFrame(self.frame_profile_menu, fg_color="transparent")
+        create_tile.grid(row=0, column=profile_amount, padx=18)
+
+        self.button_profile_create = ctk.CTkButton(create_tile, text="+", command=lambda: self.controller.show_frame(nutflixCreateProfile), font=("Arial", 48), corner_radius=10, width=tile, height=tile, fg_color="#1a1a1a", hover_color="#2a2a2a", border_width=2, border_color="#555555", text_color="#888888")
+        self.button_profile_create.pack()
+
+        ctk.CTkLabel(create_tile, text="Add Profile", font=("Arial", 16), text_color="#888888").pack(pady=(10, 0))
     
     def delete_profile(self, index):
         profile = current_account_profiles[index]
@@ -419,6 +443,49 @@ class nutflixBrowse(ctk.CTkFrame):
         self.controller = controller
         global media_list
     
+    def add_watchlist(self, name):
+        current_watchlist = self.controller.get_profile("watchlist")
+        if name in current_watchlist:
+            print("Title already in watchlist.")
+            return
+            
+        editable_watchlist = ast.literal_eval(current_watchlist) # Converts the string representation of the list into an actual list
+        editable_watchlist.append(name)
+
+        updated_rows = []
+        with open("profile_information.csv", "r", newline="") as file: # Reads the current data
+            reader = csv.reader(file)
+            for row in reader:
+                if row[0] == current_account.get_user_information("email") and row[1] == self.controller.get_profile("name"): # Finds the row which matches with the current user and the specific profile
+                    row[4] = str(editable_watchlist)
+                updated_rows.append(row) # Copies the current data into 'updated_rows', along with the updated row
+            
+        with open("profile_information.csv", "w", newline="") as file: # Rewrites the 'account_information.csv' using the updated rows
+            writer = csv.writer(file)
+            writer.writerows(updated_rows)
+        
+        self.controller.update_watchlist(str(editable_watchlist))
+
+    def remove_watchlist(self, name):
+        current_watchlist = self.controller.get_profile("watchlist")
+        
+        editable_watchlist = ast.literal_eval(current_watchlist) # Converts the string representation of the list into an actual list
+        editable_watchlist.remove(name)
+
+        updated_rows = []
+        with open("profile_information.csv", "r", newline="") as file: # Reads the current data
+            reader = csv.reader(file)
+            for row in reader:
+                if row[0] == current_account.get_user_information("email") and row[1] == self.controller.get_profile("name"): # Finds the row which matches with the current user and the specific profile
+                    row[4] = str(editable_watchlist)
+                updated_rows.append(row) # Copies the current data into 'updated_rows', along with the updated row
+           
+        with open("profile_information.csv", "w", newline="") as file: # Rewrites the 'account_information.csv' using the updated rows
+            writer = csv.writer(file)
+            writer.writerows(updated_rows)
+        
+        self.controller.update_watchlist(str(editable_watchlist))
+    
     def build_ui(self, media_list):
         # Everything in this scrollable menu
         self.scrollable_menu = ctk.CTkScrollableFrame(self)
@@ -435,9 +502,10 @@ class nutflixBrowse(ctk.CTkFrame):
         ctk.CTkLabel(self.banner_frame, image=banner_ctk, text="").pack(fill="both", expand=True)
         ctk.CTkLabel(self.banner_frame, text=banner_image.get_name(), font=("Arial", 40, "bold"), text_color="white").place(x=30, y=300)
         ctk.CTkButton(self.banner_frame, text="▶ Play", command=lambda: self.watch(banner_image)).place(x=30, y=380)
+        ctk.CTkButton(self.banner_frame, text="Add to Watchlist", fg_color="white", text_color="#C0152A", command=lambda: self.add_watchlist(banner_image.get_name())).place(x=180, y=380)
 
         # Watchlist horizontal scroller
-        ctk.CTkLabel(self.scrollable_menu, text="My Watchlist", font=("Arial", 64), anchor="w", bg_color="#161616").pack(fill="both", expand=True, pady=20)
+        ctk.CTkLabel(self.scrollable_menu, text="My Watchlist", font=("Arial", 32), anchor="w", bg_color="#161616").pack(fill="both", expand=True, pady=20)
 
         self.scrollable_watchlist = ctk.CTkScrollableFrame(self.scrollable_menu, orientation="horizontal", height=148)
         self.scrollable_watchlist.pack(fill="x", expand=False, pady=(0, 50))
@@ -446,7 +514,7 @@ class nutflixBrowse(ctk.CTkFrame):
         self.scrollable_watchlist.grid_rowconfigure((0), weight=0)
 
         # Media browsing grid
-        ctk.CTkLabel(self.scrollable_menu, text="Browse", font=("Arial", 64), anchor="w", bg_color="#161616").pack(fill="both", expand=True, pady=20)
+        ctk.CTkLabel(self.scrollable_menu, text="Browse", font=("Arial", 32), anchor="w", bg_color="#161616").pack(fill="both", expand=True, pady=20)
 
         self.grid_frame = ctk.CTkFrame(self.scrollable_menu, fg_color="transparent")
         self.grid_frame.pack(fill="both", expand=True)
@@ -454,23 +522,40 @@ class nutflixBrowse(ctk.CTkFrame):
         self.grid_frame.grid_columnconfigure((0, 1, 2, 3, 4), weight=1) 
         self.grid_frame.grid_rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
 
-        for i in media_list: # Creates instance of media_widget in a grid layout
-            index = media_list.index(i)
+        max_age_rating = self.controller.get_profile("age_rating")
+        allowed_media = []
+        for i in media_list:
+            if age_rating_order.index(i.age_rating) <= age_rating_order.index(max_age_rating): # Filters out media that is above the profile's age rating
+                allowed_media.append(i)
+        
+        for i in allowed_media: # Creates instance of media_widget in a grid layout
+            index = allowed_media.index(i)
             row = index // 5 # 5 rows
             col = index % 5 # (5-1) columns
             self.media_widget(i, self.grid_frame, False).grid(row=row, column=col, padx=10, pady=20)
     
     def choose_banner_media(self):
         max_age_rating = self.controller.get_profile("age_rating")
-        recently_watched = self.controller.get_profile("recently_watched")
-        
-        # IMPORTANT IMPORTANT THE GENRE SELECTION DOES NOT WORK PROPERLY RIGHT NOW FIX SOON
-        # Filtering based on genres and age rating
-        matches = []
+        recently_watched = ast.literal_eval(self.controller.get_profile("recently_watched"))
+
+        # Filtering based on previously watched genres and age rating
+        watched_media = []
         for title in recently_watched:
             for i in media_list:
                 if i.name == title:
-                    if age_rating_order.index(i.age_rating) <= age_rating_order.index(max_age_rating): # if the movie is within the range of which the profile user can watch
+                    if age_rating_order.index(i.age_rating) <= age_rating_order.index(max_age_rating):
+                        watched_media.append(i)
+        
+        watched_genres = set()
+        for i in watched_media:
+            watched_genres.add(i.genre1)
+            watched_genres.add(i.genre2)
+    
+        matches = []
+        for i in media_list:
+            if age_rating_order.index(i.age_rating) <= age_rating_order.index(max_age_rating):
+                if i.name not in recently_watched:
+                    if i.genre1 in watched_genres or i.genre2 in watched_genres:
                         matches.append(i)
         
         # If no matches, pick any movie/TV show that's age appropriate
@@ -498,9 +583,9 @@ class nutflixBrowse(ctk.CTkFrame):
 
         # Add to watchlist button
         if isWatchlist:
-            button_watchlist = ctk.CTkButton(label_thumbnail, text="-", height=20, width=20, command=lambda: remove_watchlist(media.get_name())) # For destroying widget
+            button_watchlist = ctk.CTkButton(label_thumbnail, text="-", height=20, width=20, command=lambda: self.remove_watchlist(media.get_name())) # For destroying widget
         else:
-            button_watchlist = ctk.CTkButton(label_thumbnail, text="+", height=20, width=20, command=lambda: add_watchlist(media.get_name())) # For adding widget
+            button_watchlist = ctk.CTkButton(label_thumbnail, text="+", height=20, width=20, command=lambda: self.add_watchlist(media.get_name())) # For adding widget
         
         button_watchlist.place(relx=0.95, rely=0.05, anchor="center")
 
