@@ -291,10 +291,6 @@ class nutflixStart(ctk.CTkFrame):
         self.frame_profile_menu.grid_columnconfigure((0, 1, 2, 3), weight=1)
         self.frame_profile_menu.grid_rowconfigure((0), weight=1)
 
-        #Remove Profiles Buttons
-        self.button_edit_profile = ctk.CTkButton(self.frame_start, text="Remove Profiles", font=("Arial", 16), width=200, height=50)
-        self.button_edit_profile.grid(row=2, column=0)
-
         #Manage Subcription Button
         self.button_subscription = ctk.CTkButton(self.frame_start, text="Manage Subscription", font=("Arial", 16), width=200, height=50, command=lambda: self.controller.show_frame(nutflixSubscriptions))
         self.button_subscription.grid(row=2, column=2)
@@ -317,12 +313,14 @@ class nutflixStart(ctk.CTkFrame):
             button_profile.grid(row=0, column=i) # Column length is variable depending on the amount of profiles
 
         #Create Profile
-        self.button_profile_create = ctk.CTkButton(self.frame_profile_menu, text="Create Profile", command=lambda: self.controller.show_frame(nutflixCreateProfile), font=("Arial", 24), width=200, height=200)
-        self.button_profile_create.grid(row=0, column=profile_amount+1) # + 1 is for the 'Create Profile' button
+        if profile_amount < 5:
+            self.button_profile_create = ctk.CTkButton(self.frame_profile_menu, text="Create Profile", command=lambda: self.controller.show_frame(nutflixCreateProfile), font=("Arial", 24), width=200, height=200)
+            self.button_profile_create.grid(row=0, column=profile_amount+1) # + 1 is for the 'Create Profile' button
     
     def select_profile(self, name, age_rating, recently_watched, watchlist):
         self.controller.set_profile(name, age_rating, recently_watched, watchlist)
         self.controller.show_frame(nutflixBrowse)
+
 
 class nutflixCreateProfile(ctk.CTkFrame):
     def __init__(self, parent, controller):
@@ -496,7 +494,7 @@ class nutflixBrowse(ctk.CTkFrame):
                 return
             
             editable_watchlist = ast.literal_eval(current_watchlist) # Converts the string representation of the list into an actual list
-            editable_watchlist.append(name)
+            editable_watchlist.insert(0, name)
 
             updated_rows = []
             with open("profile_information.csv", "r", newline="") as file: # Reads the current data
