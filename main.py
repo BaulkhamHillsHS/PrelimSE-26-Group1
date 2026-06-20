@@ -556,6 +556,17 @@ class nutflixBrowse(ctk.CTkFrame):
         # Media browsing grid
         ctk.CTkLabel(self.scrollable_menu, text="Browse", font=("Arial", 32), anchor="w", bg_color="#161616").pack(fill="both", expand=True, pady=20)
 
+        # Bar for various buttons
+        self.frame_buttons = ctk.CTkFrame(self.scrollable_menu, fg_color="#161616", height=30)
+        self.frame_buttons.pack(fill="both", expand=True)
+
+        self.frame_buttons.grid_columnconfigure((0, 1, 2, 3), weight=1) 
+        self.frame_buttons.grid_rowconfigure((0), weight=0)
+
+        # Download viewing report button
+        self.button_download = ctk.CTkButton(self.frame_buttons, text="Download", command=self.create_viewing_report)
+        self.button_download.grid(row=0, column=3)
+
         self.grid_frame = ctk.CTkFrame(self.scrollable_menu, fg_color="transparent")
         self.grid_frame.pack(fill="both", expand=True)
         
@@ -650,6 +661,10 @@ class nutflixBrowse(ctk.CTkFrame):
     def watch(self, media):
         self.controller.set_watching(media)
         self.controller.show_frame(nutflixWatch) # Todo: Create a new function in NutflixApp for specifically handling nutflixWatch()
+
+    def create_viewing_report(self):
+        watch_history = self.controller.get_profile("recently_watched")
+        print(watch_history)
 
 class nutflixWatch(ctk.CTkFrame):
     def __init__(self, parent, controller):
