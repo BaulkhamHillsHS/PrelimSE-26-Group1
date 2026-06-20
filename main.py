@@ -4,6 +4,10 @@ import csv
 import random
 import ast
 
+import os
+import platform
+from datetime import datetime
+
 ctk.set_appearance_mode('dark')
 ctk.set_default_color_theme("theme_nutflix.JSON")
 
@@ -558,7 +562,7 @@ class nutflixBrowse(ctk.CTkFrame):
         self.frame_buttons.grid_rowconfigure((0), weight=0)
 
         # Download viewing report button
-        self.button_download = ctk.CTkButton(self.frame_buttons, text="Download", command=self.create_viewing_report)
+        self.button_download = ctk.CTkButton(self.frame_buttons, text="Open Viewing History", command=self.create_viewing_report)
         self.button_download.grid(row=0, column=3)
 
         self.grid_frame = ctk.CTkFrame(self.scrollable_menu, fg_color="transparent")
@@ -658,7 +662,23 @@ class nutflixBrowse(ctk.CTkFrame):
 
     def create_viewing_report(self):
         watch_history = self.controller.get_profile("recently_watched")
-        print(watch_history)
+        with open("viewing_report.txt", "w", encoding="utf-8") as file:
+            current_time = str(datetime.now())
+
+            file.write("///// VIEWING HISTORY /////\n")
+            file.write("Time of creation [" + current_time + "]\n")
+            for i in ast.literal_eval(watch_history):
+                file.write("‣" + i + "\n")
+
+        try:
+            if platform.system() == "Darwin":  # macOS
+                os.system("open viewing_report.txt")
+            elif platform.system() == "Windows":
+                    os.startfile("viewing_report.txt")
+            elif platform.system() == "Linux":
+                os.system("xdg-open viewing_report.txt")
+        except Exception as e:
+            print(f"Error opening file: {e}")
 
 class nutflixWatch(ctk.CTkFrame):
     def __init__(self, parent, controller):
