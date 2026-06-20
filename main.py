@@ -78,6 +78,7 @@ class profile(account):
         self.age_rating = age_rating
         self.recently_watched = recently_watched
         self.watchlist = watchlist
+        self.email = email
     
     def get_name(self):
         return self.name
@@ -90,6 +91,9 @@ class profile(account):
     
     def get_watchlist(self):
         return self.watchlist
+    
+    def get_email(self):
+        return self.email
 
 class nutflixApp(ctk.CTk):
     def __init__(self):
@@ -265,8 +269,6 @@ class nutflixStart(ctk.CTkFrame):
         self.frame_bottom.grid_columnconfigure(0, weight=1)
         self.frame_bottom.grid_columnconfigure(1, weight=1)
 
-        self.button_edit_profile = ctk.CTkButton(self.frame_bottom, text="Remove Profiles", font=("Arial", 14), width=160, height=40)
-        self.button_edit_profile.grid(row=0, column=0, sticky="w")
         self.button_subscription = ctk.CTkButton(self.frame_bottom, text="Manage Subscription", font=("Arial", 14), width=160, height=40, command=lambda: self.controller.show_frame(nutflixSubscriptions))
         self.button_subscription.grid(row=0, column=1, sticky="e")
 
@@ -294,6 +296,9 @@ class nutflixStart(ctk.CTkFrame):
 
             ctk.CTkLabel(profile_tile, text=name, font=("Arial", 16), text_color="#cccccc").pack(pady=(10, 0))
 
+            button_delete = ctk.CTkButton(self.frame_profile_menu, text="Delete Profile", font=("Arial", 14), width=125, height=25, command=lambda i=i: self.delete_profile(i))
+            button_delete.grid(row=1, column=i, pady=0)
+
         #Create Profile
         plan = current_account.get_user_information("plan")
         limit = plan_profile_limits.get(plan)
@@ -306,6 +311,34 @@ class nutflixStart(ctk.CTkFrame):
             self.button_profile_create.pack()
 
             ctk.CTkLabel(create_tile, text="Add Profile", font=("Arial", 16), text_color="#888888").pack(pady=(10, 0))
+        if profile_amount < 5:
+            create_tile = ctk.CTkFrame(self.frame_profile_menu, fg_color="transparent")
+            create_tile.grid(row=0, column=profile_amount, padx=18)
+
+            self.button_profile_create = ctk.CTkButton(create_tile, text="+", command=lambda: self.controller.show_frame(nutflixCreateProfile), font=("Arial", 48), corner_radius=10, width=tile, height=tile, fg_color="#1a1a1a", hover_color="#2a2a2a", border_width=2, border_color="#555555", text_color="#888888")
+            self.button_profile_create.pack()
+
+            ctk.CTkLabel(create_tile, text="Add Profile", font=("Arial", 16), text_color="#888888").pack(pady=(10, 0))
+
+    def delete_profile(self, index):
+        profile = current_account_profiles[index]
+        name = profile.get_name()
+
+        remaining_rows = []
+        with open("profile_information.csv", "r") as file: # Csv containing profile information
+            reader = csv.reader(file)
+            for row in reader:
+                if not (row[1] == name and row[0] == current_account.current_user_email):
+                    remaining_rows.append(row)
+        
+        with open("profile_information.csv", "w", newline="") as file: # Delete profile from csv
+            writer = csv.writer(file)
+            writer.writerows(remaining_rows)
+        
+        for i in current_account_profiles:
+            if i.get_name() == name and i.get_email() == current_account.current_user_email:
+                current_account_profiles.remove(i)
+        self.controller.show_frame(nutflixStart) # Refreshes page to update ui
     
     def select_profile(self, name, age_rating, recently_watched, watchlist):
         self.controller.set_profile(name, age_rating, recently_watched, watchlist)
