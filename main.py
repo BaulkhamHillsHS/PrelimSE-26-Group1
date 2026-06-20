@@ -83,6 +83,9 @@ class account:
         if parameter == "plan":
             return self.current_user_plan
     
+    def get_email(self): # Polymorphism
+        return self.current_user_email
+    
     def profile_added(self, name, age_rating): # Called when the user adds a new profile
         new_profile = profile(name, age_rating, "[]", "[]", self.current_user_username, self.current_user_password, self.current_user_email, self.current_user_plan)
         current_account_profiles.append(new_profile)
