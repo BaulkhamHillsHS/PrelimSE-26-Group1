@@ -473,8 +473,14 @@ class nutflixBrowse(ctk.CTkFrame):
         self.grid_frame.grid_columnconfigure((0, 1, 2, 3, 4), weight=1) 
         self.grid_frame.grid_rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
 
-        for i in media_list: # Creates instance of media_widget in a grid layout
-            index = media_list.index(i)
+        max_age_rating = self.controller.get_profile("age_rating")
+        allowed_media = []
+        for i in media_list:
+            if age_rating_order.index(i.age_rating) <= age_rating_order.index(max_age_rating): # Filters out media that is above the profile's age rating
+                allowed_media.append(i)
+        
+        for i in allowed_media: # Creates instance of media_widget in a grid layout
+            index = allowed_media.index(i)
             row = index // 5 # 5 rows
             col = index % 5 # (5-1) columns
             self.media_widget(i, self.grid_frame, False).grid(row=row, column=col, padx=10, pady=20)
