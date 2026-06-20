@@ -49,12 +49,11 @@ def get_media():
 media_list = get_media() # Preload all media
 
 class account:
-    def __init__(self, username, password, email, plan, profiles):
+    def __init__(self, username, password, email, plan):
         self.current_user_username = username
         self.current_user_password = password
         self.current_user_email = email
         self.current_user_plan = plan
-        self.current_user_profiles = profiles
 
     def get_user_information(self, parameter): # Getter function to receive the details  of the current user
         if parameter == "username":
@@ -67,32 +66,14 @@ class account:
             return self.current_user_full_name
         if parameter == "plan":
             return self.current_user_plan
-        if parameter == "profile_count":
-            return self.current_user_profile_count
     
     def profile_added(self, name, age_rating): # Called when the user adds a new profile
-        count = int(self.current_user_profiles) + 1
-        self.current_user_profiles = str(count)
-
-        updated_rows = []
-        with open("account_information.csv", "r", newline="") as file: # Reads the current data
-            reader = csv.reader(file)
-            for row in reader:
-                if row[2] == self.current_user_email: # Finds the row which matches with the current user
-                    current_profile_count = int(row[4])
-                    row[4] = str(current_profile_count + 1)
-                updated_rows.append(row) # Copies the current data into 'updated_rows', along with the updated row
-        
-        with open("account_information.csv", "w", newline="") as file: # Rewrites the 'account_information.csv' using the updated rows
-            writer = csv.writer(file)
-            writer.writerows(updated_rows)
-        
-        new_profile = profile(name, age_rating, "[]", "[]", self.current_user_username, self.current_user_password, self.current_user_email, self.current_user_plan, self.current_user_profiles)
+        new_profile = profile(name, age_rating, "[]", "[]", self.current_user_username, self.current_user_password, self.current_user_email, self.current_user_plan)
         current_account_profiles.append(new_profile)
 
 class profile(account):
-    def __init__(self, name, age_rating, recently_watched, watchlist, username, password, email, plan, profiles):
-        super().__init__(username, password, email, plan, profiles)
+    def __init__(self, name, age_rating, recently_watched, watchlist, username, password, email, plan):
+        super().__init__(username, password, email, plan)
         self.name = name
         self.age_rating = age_rating
         self.recently_watched = recently_watched
@@ -139,14 +120,15 @@ class nutflixApp(ctk.CTk):
             self.update_watchlist(self.current_profile_watchlist)
         if cont == nutflixStart:
             frame.build_profile_buttons()
+        if cont == nutflixSubscriptions:
+            frame.show_plans()
         frame.tkraise()
     
-    def set_user_information(self, username, password, email, plan, profile_count): # Setter function to set the account information of the current uer
+    def set_user_information(self, username, password, email, plan): # Setter function to set the account information of the current uer
         self.current_user_username = username
         self.current_user_password = password
         self.current_user_email = email
         self.current_user_plan = plan
-        self.current_user_profile_count = profile_count
     
     def get_user_information(self, parameter): # Getter function to receive the email of the current user for identification
         if parameter == "username":
@@ -158,9 +140,7 @@ class nutflixApp(ctk.CTk):
         if parameter == "full_name":
             return self.current_user_full_name
         if parameter == "plan":
-            return self.plan
-        if parameter == "profile_count":
-            return self.current_user_profile_count
+            return self.current_user_plan
     
     def set_profile(self, profile_name, max_age_rating, recently_watched, watchlist):
         self.current_profile_name = profile_name
@@ -207,9 +187,6 @@ class nutflixSignIn(ctk.CTkFrame):
         self.frame_form.grid_columnconfigure((0), weight=1) 
         self.frame_form.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
 
-        # Logo
-        ctk.CTkImage(light_image=logo_white, dark_image=logo_red, size=(30, 30))
-
         # Heading
         ctk.CTkLabel(self.frame_form, text="Sign In", font=("Arial", 40)).grid(row=0, column=0, padx=10, pady=10)
 
@@ -240,11 +217,11 @@ class nutflixSignIn(ctk.CTkFrame):
             for row in reader:
                 if row[0] == username and row[1] == password:
                     global current_account # This becomes the currently logged in account
-                    current_account = account(row[0], row[1], row[2], row[3], row[4]) # Sets the current user details
-                    self.get_existing_profiles(row[0], row[1], row[2], row[3], row[4])
+                    current_account = account(row[0], row[1], row[2], row[3]) # Sets the current user details
+                    self.get_existing_profiles(row[0], row[1], row[2], row[3])
                     return True
     
-    def get_existing_profiles(self, username, password, email, plan, profiles):
+    def get_existing_profiles(self, username, password, email, plan):
         global current_account_profiles # List of all profiles under the account
         current_account_profiles = []
         
@@ -252,7 +229,7 @@ class nutflixSignIn(ctk.CTkFrame):
             reader = csv.reader(file)
             for row in reader:
                 if row[0] == email:
-                    current_profile = profile(row[1], row[2], row[3], row[4], username, password, email, plan, profiles)
+                    current_profile = profile(row[1], row[2], row[3], row[4], username, password, email, plan)
 
                     current_account_profiles.append(current_profile)
 
@@ -379,6 +356,29 @@ class nutflixCreateProfile(ctk.CTkFrame):
         current_account.profile_added(profile_name, profile_age_rating) # Immediately updates the profile count of the current account by +1   
         self.controller.show_frame(nutflixStart) # Takes user back to the start page
 
+plan_details = {
+    "Peanut": {
+        "price": "$7.99/mo",
+        "perks": [
+            "2 profiles",
+            "SD, 720p",
+            "Watch on 1 device at a time",
+            "Download on 1 device",
+            ],
+    },
+    "Kingnut": {
+        "price": "$14.99/mo",
+        "perks": [
+            "4 profiles",
+            "Ultra HD 4K + HDR",
+            "Watch on 4 devices at a time",
+            "Download on 4 devices",
+            "Spatial, Lossless Audio",
+            "Ad-Free",
+            ],
+    }
+}
+
 class nutflixSubscriptions(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
@@ -386,17 +386,76 @@ class nutflixSubscriptions(ctk.CTkFrame):
         self.build_ui()
     
     def build_ui(self):
-        self.frame_start = ctk.CTkFrame(self)
+        self.frame_start = ctk.CTkFrame(self, fg_color="transparent")
         self.frame_start.pack(fill="both", expand=True)
         
-        self.frame_start.grid_columnconfigure((0), weight=1) 
-        self.frame_start.grid_rowconfigure((0, 1, 2, 3), weight=1)
+        self.frame_start.grid_columnconfigure(0, weight=1)
+        self.frame_start.grid_rowconfigure(0, weight=1) # top spacing
+        self.frame_start.grid_rowconfigure(1, weight=0) # heading
+        self.frame_start.grid_rowconfigure(2, weight=0) # plan details
+        self.frame_start.grid_rowconfigure(3, weight=1) # info label
+        self.frame_start.grid_rowconfigure(4, weight=1) # bottom spacing
+        self.frame_start.grid_rowconfigure(5, weight=0) # back button
+        
+        ctk.CTkLabel(self.frame_start, text="Manage Subscription", font=("Arial", 40, "bold")).grid(row=1, column=0, pady=(0, 50))
+        
+        self.frame_plans = ctk.CTkFrame(self.frame_start, fg_color="transparent")
+        self.frame_plans.grid(row=2, column=0)
+        
+        self.info_label = ctk.CTkLabel(self.frame_start, text="", font=("Arial", 14), text_color="#888888")
+        self.info_label.grid(row=3, column=0, pady=(20, 0))
+        
+        ctk.CTkButton(self.frame_start, text="Back", command=lambda: self.controller.show_frame(nutflixStart)).grid(row=5, column=0, pady=30)
     
-    def show_plans():
-        # Will be called on refresh, to update depending on a current plan selected
+    def show_plans(self):
+        self.info_label.configure(text="")
+        for widget in self.frame_plans.winfo_children():
+            widget.destroy()
+        
         current_plan = current_account.get_user_information("plan")
-        ...
+        
+        for col, (plan_name, details) in enumerate(plan_details.items()):
+            is_current = (plan_name == current_plan)
+            
+            card = ctk.CTkFrame(self.frame_plans, width=280, height=380, corner_radius=10, border_width=2, border_color="#C0152A" if is_current else "#2A2A2A")
+            card.grid(row=0, column=col, padx=20)
+            card.grid_propagate(False)
+            card.grid_columnconfigure(0, weight=1)
+            card.grid_rowconfigure(2, weight=1)
+            card.grid_rowconfigure(3, weight=0)
+            
+            ctk.CTkLabel(card, text=plan_name, font=("Arial", 26, "bold")).grid(row=0, column=0, pady=(25, 5))
+            ctk.CTkLabel(card, text=details["price"], font=("Arial", 16)).grid(row=1, column=0, pady=(0, 20))
+            
+            perks_text = "\n".join(f"✓  {perk}" for perk in details["perks"])
+            ctk.CTkLabel(card, text=perks_text, font=("Arial", 14), justify="left", anchor="w").grid(row=2, column=0, padx=25, sticky="nw")
+
+            if is_current:
+                ctk.CTkButton(card, text="Current Plan", font=("Arial", 14), width=200, height=40, fg_color="#2A2A2A", hover_color="#2A2A2A", text_color="#888888", state="disabled").grid(row=3, column=0, pady=(20, 25))
+            else:
+                ctk.CTkButton(card, text="Switch to " + plan_name, font=("Arial", 14), width=200, height=40, command=lambda p=plan_name: self.switch_plan(p)).grid(row=3, column=0, pady=(20, 25))
     
+    def switch_plan(self, new_plan):
+        new_limit = plan_profile_limits.get(new_plan)
+        current_profile_count = len(current_account_profiles)
+        
+        if current_profile_count < new_limit:
+            return
+        
+        updated_rows = []
+        with open("account_information.csv", "r", newline="") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                if row[2] == current_account.get_user_information("email"):
+                    row[3] = new_plan
+                updated_rows.append(row)
+                
+        with open("account_information.csv", "w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerows(updated_rows)
+            
+        current_account.current_user_plan = new_plan
+        self.show_plans()
     
 class nutflixBrowse(ctk.CTkFrame):
     def __init__(self, parent, controller):
