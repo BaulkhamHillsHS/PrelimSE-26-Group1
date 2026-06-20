@@ -1,4 +1,3 @@
 email,profile_name,max_age_rating,recently_watched,watchlist
-auausten@yahoo.com,joe,G,[],"['The Shawshank Redemption', 'Breaking Bad', 'Inception', 'Inception', 'The Office', 'Interstellar', 'The Godfather', 'The Last of Us', 'Pulp Fiction', 'Parasite', 'Oppenheimer', 'Dark']"
-auausten@yahoo.com,67,M,[],"['Breaking Bad', 'Inception', 'Succession']"
-auausten@yahoo.com,New Profile,M,[],[]
+auausten@yahoo.com,joe,R18+,"['The Office']","['The Shawshank Redemption', 'Breaking Bad', 'Inception', 'Inception', 'The Office', 'Interstellar', 'The Godfather', 'The Last of Us', 'Pulp Fiction', 'Parasite', 'Oppenheimer', 'Dark']"
+auausten@yahoo.com,67,M,"[]","['Breaking Bad', 'Inception', 'Succession']"
