@@ -11,6 +11,7 @@ logo_red = Image.open("images/logo_red.png")
 logo_white = Image.open("images/logo_transparent.png")
 
 age_rating_order = ["G", "PG", "M", "MA15+", "R18+"] # Used for comparing age ratings of profiles and media
+plan_profile_limits = {"Peanut": 2, "Kingnut": 4} # Limits on how many profiles an account can have, based on their subscription tier
 
 class medium:
     def __init__(self, type):
@@ -65,7 +66,7 @@ class account:
         if parameter == "full_name":
             return self.current_user_full_name
         if parameter == "plan":
-            return self.plan
+            return self.current_user_plan
         if parameter == "profile_count":
             return self.current_user_profile_count
     
@@ -317,13 +318,17 @@ class nutflixStart(ctk.CTkFrame):
             ctk.CTkLabel(profile_tile, text=name, font=("Arial", 16), text_color="#cccccc").pack(pady=(10, 0))
 
         #Create Profile
-        create_tile = ctk.CTkFrame(self.frame_profile_menu, fg_color="transparent")
-        create_tile.grid(row=0, column=profile_amount, padx=18)
+        plan = current_account.get_user_information("plan")
+        limit = plan_profile_limits.get(plan)
+        
+        if profile_amount < limit: # If the profile amount has not reached the limit, the create profile button will show up
+            create_tile = ctk.CTkFrame(self.frame_profile_menu, fg_color="transparent")
+            create_tile.grid(row=0, column=profile_amount, padx=18)
 
-        self.button_profile_create = ctk.CTkButton(create_tile, text="+", command=lambda: self.controller.show_frame(nutflixCreateProfile), font=("Arial", 48), corner_radius=10, width=tile, height=tile, fg_color="#1a1a1a", hover_color="#2a2a2a", border_width=2, border_color="#555555", text_color="#888888")
-        self.button_profile_create.pack()
+            self.button_profile_create = ctk.CTkButton(create_tile, text="+", command=lambda: self.controller.show_frame(nutflixCreateProfile), font=("Arial", 48), corner_radius=10, width=tile, height=tile, fg_color="#1a1a1a", hover_color="#2a2a2a", border_width=2, border_color="#555555", text_color="#888888")
+            self.button_profile_create.pack()
 
-        ctk.CTkLabel(create_tile, text="Add Profile", font=("Arial", 16), text_color="#888888").pack(pady=(10, 0))
+            ctk.CTkLabel(create_tile, text="Add Profile", font=("Arial", 16), text_color="#888888").pack(pady=(10, 0))
     
     def select_profile(self, name, age_rating, recently_watched, watchlist):
         self.controller.set_profile(name, age_rating, recently_watched, watchlist)
