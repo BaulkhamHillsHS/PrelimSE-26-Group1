@@ -456,12 +456,6 @@ class nutflixSubscriptions(ctk.CTkFrame):
                 ctk.CTkButton(card, text="Switch to " + plan_name, font=("Arial", 14), width=200, height=40, command=lambda p=plan_name: self.switch_plan(p)).grid(row=3, column=0, pady=(20, 25))
     
     def switch_plan(self, new_plan):
-        new_limit = plan_profile_limits.get(new_plan)
-        current_profile_count = len(current_account_profiles)
-        
-        if current_profile_count < new_limit:
-            return
-        
         updated_rows = []
         with open("account_information.csv", "r", newline="") as file:
             reader = csv.reader(file)
