@@ -216,13 +216,13 @@ class nutflixSignIn(ctk.CTkFrame):
         self.frame_form.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
 
         # Logo
-        logo = ctk.CTkImage(light_image=logo_white, dark_image=logo_red, size=(30, 30))
+        ctk.CTkImage(light_image=logo_white, dark_image=logo_red, size=(30, 30))
 
         # Heading
         ctk.CTkLabel(self.frame_form, text="Sign In", font=("Arial", 40)).grid(row=0, column=0, padx=10, pady=10)
 
         # Text Input
-        self.entry_username = ctk.CTkEntry(self.frame_form, placeholder_text="Email", height=50, width=300)
+        self.entry_username = ctk.CTkEntry(self.frame_form, placeholder_text="Username", height=50, width=300)
         self.entry_username.grid(row=1, column=0, sticky="n")
         self.entry_password = ctk.CTkEntry(self.frame_form, placeholder_text="Password", height=50, width=300)
         self.entry_password.grid(row=2, column=0, sticky="n")
@@ -280,7 +280,7 @@ class nutflixStart(ctk.CTkFrame):
         self.frame_start.grid_rowconfigure((0, 1, 2), weight=1)
 
         #Logo
-        logo = ctk.CTkImage(light_image=logo_white, dark_image=logo_red, size=(30, 30))
+        ctk.CTkImage(light_image=logo_white, dark_image=logo_red, size=(30, 30))
         
         #Heading
         ctk.CTkLabel(self.frame_start, text="Who's Watching?", font=("Arial", 40)).grid(row=0, column=1, padx=10, pady=10)
@@ -412,7 +412,7 @@ class nutflixBrowse(ctk.CTkFrame):
         ctk.CTkButton(self.banner_frame, text="▶ Play", command=lambda: self.watch(banner_image)).place(x=30, y=380)
 
         # Watchlist horizontal scroller
-        ctk.CTkLabel(self.scrollable_menu, text="My Watchlist", font=("Arial", 64), anchor="w", bg_color="#161616").pack(fill="both", expand=True, pady=20)
+        ctk.CTkLabel(self.scrollable_menu, text="My Watchlist", font=("Arial", 32), anchor="w", bg_color="#161616").pack(fill="both", expand=True, pady=20)
 
         self.scrollable_watchlist = ctk.CTkScrollableFrame(self.scrollable_menu, orientation="horizontal", height=148)
         self.scrollable_watchlist.pack(fill="x", expand=False, pady=(0, 50))
@@ -421,7 +421,7 @@ class nutflixBrowse(ctk.CTkFrame):
         self.scrollable_watchlist.grid_rowconfigure((0), weight=0)
 
         # Media browsing grid
-        ctk.CTkLabel(self.scrollable_menu, text="Browse", font=("Arial", 64), anchor="w", bg_color="#161616").pack(fill="both", expand=True, pady=20)
+        ctk.CTkLabel(self.scrollable_menu, text="Browse", font=("Arial", 32), anchor="w", bg_color="#161616").pack(fill="both", expand=True, pady=20)
 
         self.grid_frame = ctk.CTkFrame(self.scrollable_menu, fg_color="transparent")
         self.grid_frame.pack(fill="both", expand=True)
