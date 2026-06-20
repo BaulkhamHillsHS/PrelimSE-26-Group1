@@ -583,7 +583,7 @@ class nutflixBrowse(ctk.CTkFrame):
         self.dropdown_type.grid(row=0, column=1)
 
         # Filter by genre
-        self.dropdown_genre = ctk.CTkOptionMenu(self.frame_buttons, values=["All genres", "Animation", "Biopic", "Comedy", "Crime", "Genre", "Family", "Historical", "Horror", "Romance", "Sci-fi", "Satire", "Thriller"], command=self.apply_filters)
+        self.dropdown_genre = ctk.CTkOptionMenu(self.frame_buttons, values=["All genres", "Animation", "Biopic", "Comedy", "Crime", "Genre", "Family", "Historical", "Horror", "Romance", "Sci-Fi", "Satire", "Thriller"], command=self.apply_filters)
         self.dropdown_genre.set("All genres")
         self.dropdown_genre.grid(row=0, column=2)
 
