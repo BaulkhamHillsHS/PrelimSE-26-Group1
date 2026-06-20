@@ -32,11 +32,23 @@ class media(genre): # Inherits genres from genre(), called in get_media()
         super().__init__(genre1, genre2, type)
         self.name = name
         self.age_rating = age_rating
+        self.genre1 = genre1
+        self.genre2 = genre2
+        self.type = type
         self.image = Image.open(image)
 
     def get_name(self): # Getter function for the widget to collect the name
         return self.name
     
+    def get_genre1(self):
+        return self.genre1
+    
+    def get_genre2(self):
+        return self.genre2
+    
+    def get_type(self):
+        return self.type
+
     def get_image(self): # Getter function for the widget to collect the image file
         return self.image
 
@@ -563,25 +575,59 @@ class nutflixBrowse(ctk.CTkFrame):
         self.frame_buttons = ctk.CTkFrame(self.scrollable_menu, fg_color="#161616", height=30)
         self.frame_buttons.pack(fill="both", expand=True)
 
-        self.frame_buttons.grid_columnconfigure((0, 1, 2, 3), weight=1) 
+        self.frame_buttons.grid_columnconfigure((0, 1, 2, 3, 4), weight=1) 
         self.frame_buttons.grid_rowconfigure((0), weight=0)
 
         # Download viewing report button
         self.button_download = ctk.CTkButton(self.frame_buttons, text="Open Viewing History", command=self.create_viewing_report)
-        self.button_download.grid(row=0, column=3)
+        self.button_download.grid(row=0, column=4)
+
+        # Filter by type
+        self.dropdown_type = ctk.CTkOptionMenu(self.frame_buttons, values=["Movies and Shows", "Movie", "TV Show"], command=self.apply_filters)
+        self.dropdown_type.set("Movies and Shows")
+        self.dropdown_type.grid(row=0, column=1)
+
+        # Filter by genre
+        self.dropdown_genre = ctk.CTkOptionMenu(self.frame_buttons, values=["All genres", "Animation", "Biopic", "Comedy", "Crime", "Genre", "Family", "Historical", "Horror", "Romance", "Sci-Fi", "Satire", "Thriller"], command=self.apply_filters)
+        self.dropdown_genre.set("All genres")
+        self.dropdown_genre.grid(row=0, column=2)
+
+        # Filter by age rating
+        age_filtering_list = age_rating_order[0:age_rating_order.index(self.controller.get_profile("age_rating"))+1]
+        age_filtering_list.insert(0, "All age ratings") # Creates list of values for the age_rating dropdown
+
+        self.dropdown_age_rating = ctk.CTkOptionMenu(self.frame_buttons, values=age_filtering_list, command=self.apply_filters)
+        self.dropdown_age_rating.set("All age ratings")
+        self.dropdown_age_rating.grid(row=0, column=3)
 
         self.grid_frame = ctk.CTkFrame(self.scrollable_menu, fg_color="transparent")
         self.grid_frame.pack(fill="both", expand=True)
         
         self.grid_frame.grid_columnconfigure((0, 1, 2, 3, 4), weight=1) 
         self.grid_frame.grid_rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
+        
+        self.build_grid()
 
+    def apply_filters(self, value):
+        self.build_grid()
+    
+    def build_grid(self):
+        for widget in self.grid_frame.winfo_children():
+            widget.destroy()
+        
         max_age_rating = self.controller.get_profile("age_rating")
+        type_filter = self.dropdown_type.get()
+        genre_filter = self.dropdown_genre.get()
+        rating_filter = self.dropdown_age_rating.get()
+
         allowed_media = []
         for i in media_list:
             if age_rating_order.index(i.age_rating) <= age_rating_order.index(max_age_rating): # Filters out media that is above the profile's age rating
-                allowed_media.append(i)
-        
+                # Then checks each user inputted filter before adding media to the grid
+                if i.genre1 == genre_filter or i.genre2 == genre_filter or genre_filter == "All genres":
+                    if i.type == type_filter or type_filter == "Movies and Shows":
+                        if i.age_rating == rating_filter or rating_filter == "All age ratings":
+                            allowed_media.append(i)
         for i in allowed_media: # Creates instance of media_widget in a grid layout
             index = allowed_media.index(i)
             row = index // 5 # 5 rows
