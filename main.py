@@ -230,6 +230,10 @@ class nutflixSignIn(ctk.CTkFrame):
 
         # Submit Button
         ctk.CTkButton(self.frame_form, text="Sign In", command=self.sign_in).grid(row=3, column=0, sticky="n")
+
+        # Error message
+        self.label_error = ctk.CTkLabel(self.frame_form, text="")
+        self.label_error.place(relx=0.5, rely=0.9, anchor="center")
     
     def sign_in(self):
         username = self.entry_username.get().strip()
@@ -240,8 +244,12 @@ class nutflixSignIn(ctk.CTkFrame):
 
             #Show start menu frame
             self.controller.show_frame(nutflixStart)
-        else:
-            print("Sign in failed")
+        elif username == "": # Shows error if username is empy
+            self.show_signin_error("✖ No username")
+        elif password == "": # Shows error if password is empty
+            self.show_signin_error("✖ No password")
+        else: # Shows error if username or password are incorrect
+            self.show_signin_error("✖ Incorrect username or password")
 
     def validate_credentials(self, username, password):
         with open("account_information.csv", "r") as file:
@@ -266,6 +274,9 @@ class nutflixSignIn(ctk.CTkFrame):
                     current_account_profiles.append(current_profile)
 
                     print(current_account_profiles)
+    
+    def show_signin_error(self, message):
+        self.label_error.configure(text=message) # Show an error with a customised message
 
 class nutflixStart(ctk.CTkFrame):
     def __init__(self, parent, controller):
