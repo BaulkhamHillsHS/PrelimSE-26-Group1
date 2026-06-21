@@ -558,6 +558,7 @@ class nutflixBrowse(ctk.CTkFrame):
         banner_ctk = ctk.CTkImage(light_image=banner, dark_image=banner, size=(1080, 600))
         
         ctk.CTkLabel(self.banner_frame, image=banner_ctk, text="").pack(fill="both", expand=True)
+        ctk.CTkButton(self.banner_frame, text="←  Back", font=("Arial", 14), fg_color="#1a1a1a", command=lambda: self.controller.show_frame(nutflixStart)).place(x=30, y=30)
         ctk.CTkLabel(self.banner_frame, text=banner_image.get_name(), font=("Arial", 40, "bold"), text_color="white").place(x=30, y=300)
         ctk.CTkButton(self.banner_frame, text="▶ Play", command=lambda: self.watch(banner_image)).place(x=30, y=380)
         ctk.CTkButton(self.banner_frame, text="Add to Watchlist", fg_color="white", text_color="#C0152A", command=lambda: self.add_watchlist(banner_image.get_name())).place(x=180, y=380)
@@ -782,7 +783,6 @@ class nutflixWatch(ctk.CTkFrame):
         self.label_player.grid(row=0, column=0, sticky="nsew")
         
         ctk.CTkButton(self.frame_start, text="←  Back", font=("Arial", 14), fg_color="#1a1a1a", command=lambda: self.controller.show_frame(nutflixBrowse)).place(x=30, y=30)
-
 
 if __name__ == "__main__":
     app = nutflixApp()
