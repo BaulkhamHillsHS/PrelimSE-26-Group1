@@ -245,9 +245,9 @@ class nutflixSignIn(ctk.CTkFrame):
             #Show start menu frame
             self.controller.show_frame(nutflixStart)
         elif username == "": # Shows error if username is empy
-            self.show_signin_error("✖ No username")
+            self.show_signin_error("✖ Must ener a username")
         elif password == "": # Shows error if password is empty
-            self.show_signin_error("✖ No password")
+            self.show_signin_error("✖ Must enter a password")
         else: # Shows error if username or password are incorrect
             self.show_signin_error("✖ Incorrect username or password")
 
@@ -310,6 +310,9 @@ class nutflixStart(ctk.CTkFrame):
 
         self.button_subscription = ctk.CTkButton(self.frame_bottom, text="Manage Subscription", font=("Arial", 14), width=160, height=40, command=lambda: self.controller.show_frame(nutflixSubscriptions))
         self.button_subscription.grid(row=0, column=1, sticky="e")
+
+        # Exit program button
+        ctk.CTkButton(self.frame_start, text="Exit Nutflix", command=lambda: self.controller.destroy()).grid(row=5, column=0, pady=30)
 
     def build_profile_buttons(self): # Runs whenever the page loads through the controller
         #Profile Buttons
@@ -397,6 +400,9 @@ class nutflixCreateProfile(ctk.CTkFrame):
         self.age_rating.grid(row=3, column=0, pady=10)
         
         ctk.CTkButton(self.frame_start, text="Create Profile", command=self.add_profile).grid(row=4, column=0, sticky="n")
+
+        #Back button
+        ctk.CTkButton(self.frame_start, text="Back", command=lambda: self.controller.show_frame(nutflixStart)).grid(row=5, column=0, pady=30)
     
     def add_profile(self):
         profile_name = self.profile_name.get()
