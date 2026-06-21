@@ -95,7 +95,8 @@ class profile(account):
         self.recently_watched = recently_watched
         self.watchlist = watchlist
         self.email = email
-    
+
+    # Getter functions for profile information
     def get_name(self):
         return self.name
     
@@ -135,12 +136,12 @@ class nutflixApp(ctk.CTk):
         
         self.show_frame(nutflixSignIn)
     
-    def show_frame(self, cont):
+    def show_frame(self, cont): # Cont is the current frame
         frame = self.frames[cont]
-        if cont == nutflixBrowse:
+        if cont == nutflixBrowse: # Force loads the ui elements of nutflixBrowse, nutflixStart etc.
             frame.build_ui(media_list)
             self.update_watchlist(self.current_profile_watchlist)
-        if cont == nutflixStart:
+        if cont == nutflixStart: 
             frame.build_profile_buttons()
         if cont == nutflixSubscriptions:
             frame.show_plans()
@@ -166,13 +167,13 @@ class nutflixApp(ctk.CTk):
         if parameter == "plan":
             return self.current_user_plan
     
-    def set_profile(self, profile_name, max_age_rating, recently_watched, watchlist):
+    def set_profile(self, profile_name, max_age_rating, recently_watched, watchlist): # Used when the user selects a profile, sets the information of the current profile to be accessed
         self.current_profile_name = profile_name
         self.current_profile_age_rating = max_age_rating
         self.current_profile_recently_watched = recently_watched
         self.current_profile_watchlist = watchlist
     
-    def get_profile(self, parameter):
+    def get_profile(self, parameter): # Variable function to receive specific attirubtes of the current set profile
         if parameter == "name":
             return self.current_profile_name
         if parameter == "age_rating":
@@ -196,7 +197,7 @@ class nutflixApp(ctk.CTk):
         try:
             return self.watching
         except:
-            print("User is not watching...")
+            return
 
 class nutflixSignIn(ctk.CTkFrame):
     def __init__(self, parent, controller):
@@ -233,13 +234,12 @@ class nutflixSignIn(ctk.CTkFrame):
         self.label_error.place(relx=0.5, rely=0.9, anchor="center")
     
     def sign_in(self):
+        # Get user inputted username and password
         username = self.entry_username.get().strip()
         password = self.entry_password.get().strip()
 
         if self.validate_credentials(username, password):
-            print("Sign in successful")
-
-            #Show start menu frame
+            #Show start menu frame if successfully logged in
             self.controller.show_frame(nutflixStart)
         elif username == "": # Shows error if username is empy
             self.show_signin_error("✖ Must enter a username")
@@ -265,12 +265,9 @@ class nutflixSignIn(ctk.CTkFrame):
         with open("profile_information.csv", "r") as file:
             reader = csv.reader(file)
             for row in reader:
-                if row[0] == email:
+                if row[0] == email: # Profiles under the same email are added to current_account_profiles
                     current_profile = profile(row[1], row[2], row[3], row[4], username, password, email, plan)
-
                     current_account_profiles.append(current_profile)
-
-                    print(current_account_profiles)
     
     def show_signin_error(self, message):
         self.label_error.configure(text=message) # Show an error with a customised message
@@ -356,7 +353,7 @@ class nutflixStart(ctk.CTkFrame):
         with open("profile_information.csv", "r") as file: # Csv containing profile information
             reader = csv.reader(file)
             for row in reader:
-                if not (row[1] == name and row[0] == current_account.current_user_email):
+                if not (row[1] == name and row[0] == current_account.current_user_email): # If the profile is NOT the indexed profile, keep it
                     remaining_rows.append(row)
         
         with open("profile_information.csv", "w", newline="") as file: # Delete profile from csv
@@ -469,18 +466,21 @@ class nutflixSubscriptions(ctk.CTkFrame):
         
         self.info_label = ctk.CTkLabel(self.frame_start, text="", font=("Arial", 14), text_color="#888888")
         self.info_label.grid(row=3, column=0, pady=(20, 0))
-        
+
+        # Button to go back to start
         ctk.CTkButton(self.frame_start, text="Back", command=lambda: self.controller.show_frame(nutflixStart)).grid(row=5, column=0, pady=30)
     
     def show_plans(self):
         self.info_label.configure(text="")
+
+        # Clear previous widgets to create a blank canvas
         for widget in self.frame_plans.winfo_children():
             widget.destroy()
         
         current_plan = current_account.get_user_information("plan")
         
         for col, (plan_name, details) in enumerate(plan_details.items()):
-            is_current = (plan_name == current_plan)
+            is_current = (plan_name == current_plan) # Checks if this widget should be greyed out or available to interact with
             
             card = ctk.CTkFrame(self.frame_plans, width=280, height=380, corner_radius=10, border_width=2, border_color="#C0152A" if is_current else "#2A2A2A")
             card.grid(row=0, column=col, padx=20)
@@ -500,7 +500,7 @@ class nutflixSubscriptions(ctk.CTkFrame):
             else:
                 ctk.CTkButton(card, text="Switch to " + plan_name, font=("Arial", 14), width=200, height=40, command=lambda p=plan_name: self.switch_plan(p)).grid(row=3, column=0, pady=(20, 25))
     
-    def switch_plan(self, new_plan):
+    def switch_plan(self, new_plan): # Change the users plan in the csv file as well as the global current_account object
         updated_rows = []
         with open("account_information.csv", "r", newline="") as file:
             reader = csv.reader(file)
@@ -526,8 +526,7 @@ class nutflixBrowse(ctk.CTkFrame):
     
     def add_watchlist(self, name):
         current_watchlist = self.controller.get_profile("watchlist")
-        if name in current_watchlist:
-            print("Title already in watchlist.")
+        if name in current_watchlist: # Check if item is already in watchlist to prevent clogging
             return
             
         editable_watchlist = ast.literal_eval(current_watchlist) # Converts the string representation of the list into an actual list
@@ -642,9 +641,11 @@ class nutflixBrowse(ctk.CTkFrame):
         self.build_grid()
     
     def build_grid(self):
+        # Clear pre-existing widgets
         for widget in self.grid_frame.winfo_children():
             widget.destroy()
-        
+
+        # Gather the filters (if any) applied by the user
         max_age_rating = self.controller.get_profile("age_rating")
         type_filter = self.dropdown_type.get()
         genre_filter = self.dropdown_genre.get()
@@ -770,18 +771,18 @@ class nutflixBrowse(ctk.CTkFrame):
         watch_history = ast.literal_eval(watch_history)
         watch_history.reverse()
 
-        with open("viewing_report.txt", "w", encoding="utf-8") as file:
+        with open("viewing_report.txt", "w", encoding="utf-8") as file: # Open the .txt file and edit it
             current_time = str(datetime.now())
             file.write("Time of creation [" + current_time + "]\n\n")
             file.write("///// VIEWING HISTORY /////\n")
-            for i in watch_history:
+            for i in watch_history: # Add the users watch history in chronological order
                 file.write("‣" + i + "\n")
             
             file.write("\n//// CURRENT SUBSCRIPTION /////\n")
-            file.write(current_account.current_user_plan)
+            file.write(current_account.current_user_plan) # Add the users current plan
         
         with open("viewing_report.txt", "r", encoding="utf-8") as file:
-            history = file.read()
+            history = file.read() # Extract the .txt
         
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists(): # Checks if window is not created yet or was destroyed by user
             self.toplevel_window = nutflixViewingReport(self, history)  
@@ -818,6 +819,7 @@ class nutflixWatch(ctk.CTkFrame):
         self.controller = controller
     
     def build_ui(self):
+        # Destroy pre-existing widgets
         for widget in self.winfo_children():
             widget.destroy()
         
@@ -828,7 +830,8 @@ class nutflixWatch(ctk.CTkFrame):
         
         self.frame_start.grid_columnconfigure(0, weight=1) 
         self.frame_start.grid_rowconfigure(0, weight=1)
-        
+
+        # Display the image of the title being watched
         player_image = media.get_image().resize((1080, 720))
         player_ctk = ctk.CTkImage(light_image=player_image, dark_image=player_image, size=(1080, 720))
         
