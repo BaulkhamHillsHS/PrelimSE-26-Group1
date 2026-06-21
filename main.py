@@ -245,7 +245,7 @@ class nutflixSignIn(ctk.CTkFrame):
             #Show start menu frame
             self.controller.show_frame(nutflixStart)
         elif username == "": # Shows error if username is empy
-            self.show_signin_error("✖ Must ener a username")
+            self.show_signin_error("✖ Must enter a username")
         elif password == "": # Shows error if password is empty
             self.show_signin_error("✖ Must enter a password")
         else: # Shows error if username or password are incorrect
