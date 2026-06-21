@@ -118,6 +118,7 @@ class nutflixApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Nutflix")
+
         self.iconbitmap("images/logo_red.ico")
         self.geometry("1080x720")
         self.resizable(True, True)
