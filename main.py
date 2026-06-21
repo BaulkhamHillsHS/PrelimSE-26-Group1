@@ -117,7 +117,8 @@ class profile(account):
 class nutflixApp(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("Streaming app")
+        self.title("Nutflix")
+        self.iconbitmap("images/logo_red.ico")
         self.geometry("1080x720")
         self.resizable(True, True)
 
@@ -748,24 +749,45 @@ class nutflixBrowse(ctk.CTkFrame):
 
         with open("viewing_report.txt", "w", encoding="utf-8") as file:
             current_time = str(datetime.now())
-
-            file.write("///// VIEWING HISTORY /////\n")
             file.write("Time of creation [" + current_time + "]\n\n")
+            file.write("///// VIEWING HISTORY /////\n")
             for i in watch_history:
                 file.write("‣" + i + "\n")
+            
+            file.write("\n//// CURRENT SUBSCRIPTION /////\n")
+            file.write(current_account.current_user_plan)
+        
+        with open("viewing_report.txt", "r", encoding="utf-8") as file:
+            history = file.read()
         
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists(): # Checks if window is not created yet or was destroyed by user
-            self.toplevel_window = nutflixViewingReport(self)  
+            self.toplevel_window = nutflixViewingReport(self, history)  
             
             self.toplevel_window.after(200, lambda: self.toplevel_window.lift()) 
         else:
             self.toplevel_window.focus() # If its already opened, bring it to focus
 
 class nutflixViewingReport(ctk.CTkToplevel):
-    def __init__(self, parent):
+    def __init__(self, parent, history):
         super().__init__(parent)
-        self.geometry("400x300")
+        self.geometry("600x450")
         self.title("Viewing Report")
+        self.history = history
+        self.build_ui()
+    
+    def build_ui(self):
+        self.frame = ctk.CTkFrame(self)
+        self.frame.pack(fill="both", expand=True, pady=1)
+
+        self.frame.grid_columnconfigure((0), weight=1) 
+        self.frame.grid_rowconfigure((0), weight=1)
+
+        # Viewing history
+        self.text_history = ctk.CTkTextbox(self.frame, width=400)
+        self.text_history.grid(row=0, column=0, sticky="nsew")
+        self.text_history.insert("0.0", self.history)
+        self.text_history.configure(state="disabled") # Ensures user cannot edit textbox
+
 
 class nutflixWatch(ctk.CTkFrame):
     def __init__(self, parent, controller):
