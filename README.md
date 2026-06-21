@@ -4,4 +4,4 @@ Hey there!
 
 Thanks for being interested in using NUTFLIX, our new streaming service.
 
-Please follow this video tutorial to see how to use our service: <a href="[https://drive.google.com/file/d/1XJG5_-O2XbPHTX75YwQgBpeenG1qIEy8/view?usp=sharing](https://drive.google.com/file/d/1T_wTCMjS8xm6qqt35qeCZvbCiDrF0Pwy/view?usp=sharing)">Watch Me!</a>
+Please follow this video tutorial to see how to use our service: <a href="https://drive.google.com/file/d/1T_wTCMjS8xm6qqt35qeCZvbCiDrF0Pwy/view?usp=sharing">Watch Me!</a>
