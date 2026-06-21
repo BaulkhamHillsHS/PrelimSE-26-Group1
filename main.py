@@ -213,6 +213,11 @@ class nutflixSignIn(ctk.CTkFrame):
         self.frame_form.grid_columnconfigure((0), weight=1) 
         self.frame_form.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
 
+        # Logo
+        self.logo = ctk.CTkImage(light_image=logo_white, dark_image=logo_red, size=(150, 150))
+        self.label_logo = ctk.CTkLabel(text="", master=self, image = self.logo)
+        self.label_logo.place(relx=0.5, rely=0.15, anchor="center")
+
         # Heading
         ctk.CTkLabel(self.frame_form, text="Sign In", font=("Arial", 40)).grid(row=0, column=0, padx=10, pady=10)
 
