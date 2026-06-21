@@ -497,6 +497,8 @@ class nutflixBrowse(ctk.CTkFrame):
         super().__init__(parent)
         self.controller = controller
         global media_list
+
+        self.toplevel_window = None
     
     def add_watchlist(self, name):
         current_watchlist = self.controller.get_profile("watchlist")
@@ -583,7 +585,7 @@ class nutflixBrowse(ctk.CTkFrame):
         self.frame_buttons.grid_rowconfigure((0), weight=0)
 
         # Download viewing report button
-        self.button_download = ctk.CTkButton(self.frame_buttons, text="Open Viewing History", command=self.create_viewing_report)
+        self.button_download = ctk.CTkButton(self.frame_buttons, text="Open Viewing Report", command=self.create_viewing_report)
         self.button_download.grid(row=0, column=4)
 
         # Filter by type
@@ -741,23 +743,29 @@ class nutflixBrowse(ctk.CTkFrame):
 
     def create_viewing_report(self):
         watch_history = self.controller.get_profile("recently_watched")
+        watch_history = ast.literal_eval(watch_history)
+        watch_history.reverse()
+
         with open("viewing_report.txt", "w", encoding="utf-8") as file:
             current_time = str(datetime.now())
 
             file.write("///// VIEWING HISTORY /////\n")
-            file.write("Time of creation [" + current_time + "]\n")
-            for i in ast.literal_eval(watch_history):
+            file.write("Time of creation [" + current_time + "]\n\n")
+            for i in watch_history:
                 file.write("‣" + i + "\n")
+        
+        if self.toplevel_window is None or not self.toplevel_window.winfo_exists(): # Checks if window is not created yet or was destroyed by user
+            self.toplevel_window = nutflixViewingReport(self)  
+            
+            self.toplevel_window.after(200, lambda: self.toplevel_window.lift()) 
+        else:
+            self.toplevel_window.focus() # If its already opened, bring it to focus
 
-        try:
-            if platform.system() == "Darwin":  # macOS
-                os.system("open viewing_report.txt")
-            elif platform.system() == "Windows":
-                    os.startfile("viewing_report.txt")
-            elif platform.system() == "Linux":
-                os.system("xdg-open viewing_report.txt")
-        except Exception as e:
-            print(f"Error opening file: {e}")
+class nutflixViewingReport(ctk.CTkToplevel):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.geometry("400x300")
+        self.title("Viewing Report")
 
 class nutflixWatch(ctk.CTkFrame):
     def __init__(self, parent, controller):
