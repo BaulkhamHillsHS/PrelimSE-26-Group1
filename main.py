@@ -3,9 +3,6 @@ from PIL import Image, ImageEnhance
 import csv
 import random
 import ast
-
-import os
-import platform
 from datetime import datetime
 
 ctk.set_appearance_mode('dark')
