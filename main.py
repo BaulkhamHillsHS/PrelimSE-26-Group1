@@ -64,7 +64,7 @@ media_list = get_media() # Preload all media
 class account:
     def __init__(self, username, password, email, plan):
         self.current_user_username = username
-        self.current_user_password = password
+        self.__current_user_password = password
         self.current_user_email = email
         self.current_user_plan = plan
 
@@ -72,7 +72,7 @@ class account:
         if parameter == "username":
             return self.current_user_username
         if parameter == "password":
-            return self.current_user_password
+            return self.__current_user_password
         if parameter == "email":
             return self.current_user_email
         if parameter == "full_name":
@@ -84,7 +84,7 @@ class account:
         return self.current_user_email
     
     def profile_added(self, name, age_rating): # Called when the user adds a new profile
-        new_profile = profile(name, age_rating, "[]", "[]", self.current_user_username, self.current_user_password, self.current_user_email, self.current_user_plan)
+        new_profile = profile(name, age_rating, "[]", "[]", self.current_user_username, self.__current_user_password, self.current_user_email, self.current_user_plan)
         current_account_profiles.append(new_profile)
 
 class profile(account):
@@ -92,8 +92,8 @@ class profile(account):
         super().__init__(username, password, email, plan)
         self.name = name
         self.age_rating = age_rating
-        self.recently_watched = recently_watched
-        self.watchlist = watchlist
+        self.__recently_watched = recently_watched
+        self.__watchlist = watchlist
         self.email = email
 
     # Getter functions for profile information
@@ -104,10 +104,10 @@ class profile(account):
         return self.age_rating
     
     def get_recently_watched(self):
-        return self.recently_watched
+        return self.__recently_watched
     
     def get_watchlist(self):
-        return self.watchlist
+        return self.__watchlist
     
     def get_email(self):
         return self.email
@@ -151,7 +151,7 @@ class nutflixApp(ctk.CTk):
     
     def set_user_information(self, username, password, email, plan): # Setter function to set the account information of the current uer
         self.current_user_username = username
-        self.current_user_password = password
+        self.__current_user_password = password
         self.current_user_email = email
         self.current_user_plan = plan
     
@@ -159,7 +159,7 @@ class nutflixApp(ctk.CTk):
         if parameter == "username":
             return self.current_user_username
         if parameter == "password":
-            return self.current_user_password
+            return self.__current_user_password
         if parameter == "email":
             return self.current_user_email
         if parameter == "full_name":
