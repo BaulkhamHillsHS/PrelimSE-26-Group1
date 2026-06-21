@@ -218,7 +218,7 @@ class nutflixSignIn(ctk.CTkFrame):
         self.label_logo.place(relx=0.5, rely=0.15, anchor="center")
 
         # Heading
-        ctk.CTkLabel(self.frame_form, text="Sign In", font=("Arial", 40)).grid(row=0, column=0, padx=10, pady=10)
+        ctk.CTkLabel(self.frame_form, text="Sign In to Nutflix", font=("Arial", 40)).grid(row=0, column=0, padx=10, pady=10)
 
         # Text Input
         self.entry_username = ctk.CTkEntry(self.frame_form, placeholder_text="Username", height=50, width=300)
@@ -290,7 +290,12 @@ class nutflixStart(ctk.CTkFrame):
         self.frame_start.grid_rowconfigure(4, weight=0) # bottom buttons
         
         # Heading
-        ctk.CTkLabel(self.frame_start, text="Who's Watching?", font=("Arial", 42, "bold")).grid(row=1, column=0, pady=(0, 50))
+        ctk.CTkLabel(self.frame_start, text="Who's Watching on Nutflix?", font=("Arial", 42, "bold")).grid(row=1, column=0, pady=(0, 50))
+
+        # Logo
+        self.logo = ctk.CTkImage(light_image=logo_white, dark_image=logo_red, size=(100, 100))
+        self.label_logo = ctk.CTkLabel(text="", master=self, image = self.logo)
+        self.label_logo.place(relx=0.1, rely=0.15, anchor="center")
 
         # Profile Select
         self.frame_profile_menu = ctk.CTkFrame(self.frame_start, fg_color="transparent")
@@ -302,7 +307,7 @@ class nutflixStart(ctk.CTkFrame):
         self.frame_bottom.grid_columnconfigure(0, weight=1)
         self.frame_bottom.grid_columnconfigure(1, weight=1)
 
-        self.button_subscription = ctk.CTkButton(self.frame_bottom, text="Manage Subscription", font=("Arial", 14), width=160, height=40, command=lambda: self.controller.show_frame(nutflixSubscriptions))
+        self.button_subscription = ctk.CTkButton(self.frame_bottom, text="Manage Nutflix Subscription", font=("Arial", 14), width=160, height=40, command=lambda: self.controller.show_frame(nutflixSubscriptions))
         self.button_subscription.grid(row=0, column=1, sticky="e")
 
         # Exit program button
@@ -459,7 +464,7 @@ class nutflixSubscriptions(ctk.CTkFrame):
         self.frame_start.grid_rowconfigure(4, weight=1) # bottom spacing
         self.frame_start.grid_rowconfigure(5, weight=0) # back button
         
-        ctk.CTkLabel(self.frame_start, text="Manage Subscription", font=("Arial", 40, "bold")).grid(row=1, column=0, pady=(0, 50))
+        ctk.CTkLabel(self.frame_start, text="Manage Nutflix Subscription", font=("Arial", 40, "bold")).grid(row=1, column=0, pady=(0, 50))
         
         self.frame_plans = ctk.CTkFrame(self.frame_start, fg_color="transparent")
         self.frame_plans.grid(row=2, column=0)
