@@ -372,17 +372,20 @@ class nutflixCreateProfile(ctk.CTkFrame):
         self.frame_start.pack(fill="both", expand=True)
         
         self.frame_start.grid_columnconfigure((0), weight=1) 
-        self.frame_start.grid_rowconfigure((0, 1, 2, 3), weight=1)
+        self.frame_start.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
 
         ctk.CTkLabel(self.frame_start, text="Create Profile", font=("Arial", 40)).grid(row=0, column=0, padx=10, pady=10)
         
         self.profile_name = ctk.CTkEntry(self.frame_start, placeholder_text="Profile Name", height=50, width=300)
         self.profile_name.grid(row=1, column=0, pady=10)
+
+        # Age rating
+        ctk.CTkLabel(self.frame_start, text="Select Age Rating", font=("Arial", 18)).grid(row=2, column=0, padx=10, pady=0)
         
         self.age_rating = ctk.CTkOptionMenu(self.frame_start, values=["G", "PG", "M", "MA15+", "R18+"], height=50, width=300)
-        self.age_rating.grid(row=2, column=0, pady=10)
+        self.age_rating.grid(row=3, column=0, pady=10)
         
-        ctk.CTkButton(self.frame_start, text="Create Profile", command=self.add_profile).grid(row=3, column=0, sticky="n")
+        ctk.CTkButton(self.frame_start, text="Create Profile", command=self.add_profile).grid(row=4, column=0, sticky="n")
     
     def add_profile(self):
         profile_name = self.profile_name.get()
